@@ -105,11 +105,17 @@ body.dark {
   transform: translateX(-50%);
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(79,195,255,0.6), rgba(0,0,0,0) 70%);
+  background: radial-gradient(circle, rgba(79,195,255,0.6), transparent 70%);
   border-radius: 50%;
   filter: blur(40px);
-  pointer-events: none;
+  animation: pulse 6s ease-in-out infinite;
 }
+
+@keyframes pulse {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.08); }
+}
+
 /* AUTH PAGE */
 .auth-wrapper {
   display: flex;
