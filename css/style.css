@@ -170,4 +170,19 @@ body.dark {
   bottom: -180px;
   filter: blur(50px);
 }
+.btn-primary,
+.btn-outline {
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(0, 183, 255, 0.9);
+}
+
+.btn-outline:hover {
+  background: rgba(79, 195, 255, 0.1);
+  box-shadow: 0 0 15px rgba(79, 195, 255, 0.6);
+}
+
 
