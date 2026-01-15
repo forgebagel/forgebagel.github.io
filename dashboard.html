@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2f5;
+      padding: 20px;
+    }
+    h2 {
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Dashboard</h2>
+  <p id="user"></p>
+
+  <input type="file" id="file" />
+  <br />
+  <button id="upload">Upload File</button>
+  <br /><br />
+  <button id="logout">Logout</button>
+
+  <!-- Firebase -->
+  <script type="module" src="js/firebase.js"></script>
+
+  <!-- Dashboard Logic -->
+  <script type="module">
+    import { auth, stora
