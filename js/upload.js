@@ -22,9 +22,17 @@ onAuthStateChanged(auth, user => {
     return;
   }
 
+  if (!user.emailVerified) {
+    alert("Please verify your email before accessing the dashboard.");
+    auth.signOut();
+    window.location.href = "login.html";
+    return;
+  }
+
   status.textContent = "Welcome to your dashboard";
   emailText.textContent = "Signed in as: " + user.email;
 });
+
 
 /* UPLOAD */
 uploadBtn.onclick = async () => {
