@@ -2,80 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Dashboard</title>
+  <title>Dashboard • CloudVault</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Optional CSS -->
   <link rel="stylesheet" href="css/style.css">
-
-  <style>
-    body {
-      background: #eef2f5;
-      padding: 20px;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    button {
-      padding: 10px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-  </style>
 </head>
 
 <body class="dark fade-in">
->
 
-  <h2>Dashboard</h2>
+  <!-- NAVBAR -->
+  <nav class="nav">
+    <div class="logo">CloudVault</div>
+    <button id="logoutBtn" class="btn-outline">Logout</button>
+  </nav>
 
-  <p id="user">Loading user...</p>
+  <!-- CONTENT -->
+  <div class="dashboard">
+    <h2 id="status">Loading user...</h2>
 
-  <hr>
+    <input type="file" id="fileInput" />
+    <button id="uploadBtn" class="btn-primary">Upload File</button>
 
-  <h3>Upload a file</h3>
-  <input type="file" id="file" />
-  <br>
-  <button id="upload">Upload</button>
+    <p class="muted" id="userEmail"></p>
+  </div>
 
-  <hr>
-
-  <button id="logout">Logout</button>
-
-  <!-- DASHBOARD LOGIC -->
-  <script type="module">
-    import { auth } from "./js/firebase.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { uploadFile } from "./js/upload.js";
-    import { logout } from "./js/auth.js";
-
-    const userText = document.getElementById("user");
-
-    // 🔐 Protect page & show user
-    onAuthStateChanged(auth, user => {
-      if (!user) {
-        window.location.href = "login.html";
-      } else {
-        userText.textContent = "Logged in as: " + user.email;
-      }
-    });
-
-    // 📤 Upload file
-    document.getElementById("upload").onclick = async () => {
-      const fileInput = document.getElementById("file");
-      const file = fileInput.files[0];
-
-      if (!file) {
-        alert("Please choose a file");
-        return;
-      }
-
-      await uploadFile(file);
-      alert("File uploaded successfully");
-      fileInput.value = "";
-    };
-
-    // 🚪 Logout
-    document.getElementById("logout").onclick = logout;
-  </script>
+  <!-- SCRIPTS -->
+  <script type="module" src="js/upload.js"></script>
 
 </body>
 </html>
