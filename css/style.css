@@ -12,11 +12,18 @@ body.dark {
 
 /* NAVBAR */
 .nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 40px;
+  padding: 18px 40px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(79, 195, 255, 0.2);
 }
+
 
 .logo {
   font-size: 22px;
