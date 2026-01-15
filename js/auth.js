@@ -3,67 +3,60 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  signOut
+  sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-export function signup(email, password, callback) {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(callback)
-    .catch(err => alert(err.message));
-}
-
-export function login(email, password, callback) {
-  signInWithEmailAndPassword(auth, email, password)
-    .then(callback)
-    .catch(err => alert(err.message));
-}
-
-export function protectPage(redirect = "login.html") {
-  onAuthStateChanged(auth, user => {
-    if (!user) window.location.href = redirect;
-  });
-}
-
-export function logout() {
-  signOut(auth).then(() => {
-    window.location.href = "login.html";
-  });
-}const passwordInput = document.getElementById("password");
-const bar = document.getElementById("strength-bar");
-
-if (passwordInput) {
-  passwordInput.addEventListener("input", () => {
-    const val = passwordInput.value;
-    let strength = 0;
-
-    if (val.length >= 6) strength += 30;
-    if (/[A-Z]/.test(val)) strength += 20;
-    if (/[0-9]/.test(val)) strength += 20;
-    if (/[^A-Za-z0-9]/.test(val)) strength += 30;
-
-    bar.style.width = strength + "%";
-
-    bar.style.background =
-      strength < 40 ? "red" :
-      strength < 70 ? "orange" :
-      "#4fc3ff";
-  });
-}
-import { sendPasswordResetEmail } from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
+/* ELEMENTS */
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const signupBtn = document.getElementById("signupBtn");
+const loginBtn = document.getElementById("loginBtn");
 const resetBtn = document.getElementById("resetPassword");
 
+/* SIGN UP */
+if (signupBtn) {
+  signupBtn.onclick = async () => {
+    try {
+      await createUserWithEmailAndPassword(
+        auth,
+        email.value,
+        password.value
+      );
+      window.location.href = "dashboard.html";
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+}
+
+/* LOGIN */
+if (loginBtn) {
+  loginBtn.onclick = async () => {
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        email.value,
+        password.value
+      );
+      window.location.href = "dashboard.html";
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+}
+
+/* RESET PASSWORD */
 if (resetBtn) {
-  resetBtn.addEventListener("click", async () => {
-    const email = document.getElementById("email").value;
-    if (!email) {
+  resetBtn.onclick = async () => {
+    if (!email.value) {
       alert("Enter your email first");
       return;
     }
-    await sendPasswordResetEmail(auth, email);
-    alert("Password reset email sent");
-  });
+    try {
+      await sendPasswordResetEmail(auth, email.value);
+      alert("Password reset email sent");
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 }
-
-
