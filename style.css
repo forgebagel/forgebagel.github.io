@@ -1,16 +1,43 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  text-align: center;
-  margin-top: 20vh;
+* {
+  box-sizing: border-box;
 }
 
-h1 {
-  color: #333;
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Login box */
+.box {
+  background: #ffffff;
+  padding: 20px;
+  width: 320px;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.15);
+}
+
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
 }
 
 button {
-  padding: 10px 20px;
-  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
   cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Dashboard */
+h2 {
+  margin-top: 0;
+}
+
+p {
+  font-size: 14px;
 }
