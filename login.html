@@ -1,52 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Login • CloudVault</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body class="dark fade-in">
->
 
-  <!-- NAVBAR -->
   <nav class="nav">
     <div class="logo">CloudVault</div>
-    <div class="nav-buttons">
-      <a href="index.html" class="btn-outline">Home</a>
-    </div>
+    <a href="index.html" class="btn-outline">Home</a>
   </nav>
 
-  <!-- LOGIN CARD -->
   <div class="auth-wrapper">
     <div class="auth-card">
-      <h2>Welcome Back</h2>
-      <p class="muted">Login or create an account</p>
+      <h2>Login</h2>
 
-      <input type="email" id="email" placeholder="Email" />
-      <input type="password" id="password" placeholder="Password" />
-      <div class="strength">
-  <div id="strength-bar"></div>
-</div>
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
 
+      <button id="loginBtn" class="btn-primary full">Login</button>
 
-      <button id="signupBtn" class="btn-primary full">Sign Up</button>
-      <button id="loginBtn" class="btn-outline full">Login</button>
-      <p class="muted small link" id="resetPassword">Forgot password?</p>
+      <p class="link small" id="resetPassword">Forgot password?</p>
 
       <p class="muted small">
-        Your files are encrypted & secure.
+        New user?
+        <a href="register.html" class="link">Register</a>
       </p>
     </div>
   </div>
 
-  <!-- GLOW PLANET -->
   <div class="planet small"></div>
 
-  <!-- AUTH LOGIC -->
   <script type="module" src="js/auth.js"></script>
-
 </body>
 </html>
