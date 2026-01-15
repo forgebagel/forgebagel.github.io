@@ -2,89 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Login</title>
+  <title>Login • CloudVault</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .box {
-      background: #fff;
-      padding: 20px;
-      width: 300px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input, button {
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-    }
-    button {
-      background: #007bff;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    p {
-      color: red;
-      font-size: 14px;
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body>
-  <div class="box">
-    <h2>Login / Sign Up</h2>
+<body class="dark">
 
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
+  <!-- NAVBAR -->
+  <nav class="nav">
+    <div class="logo">CloudVault</div>
+    <div class="nav-buttons">
+      <a href="index.html" class="btn-outline">Home</a>
+    </div>
+  </nav>
 
-    <button id="signup">Sign Up</button>
-    <button id="login">Login</button>
+  <!-- LOGIN CARD -->
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <h2>Welcome Back</h2>
+      <p class="muted">Login or create an account</p>
 
-    <p id="msg"></p>
+      <input type="email" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Password" />
+
+      <button id="signupBtn" class="btn-primary full">Sign Up</button>
+      <button id="loginBtn" class="btn-outline full">Login</button>
+
+      <p class="muted small">
+        Your files are encrypted & secure.
+      </p>
+    </div>
   </div>
 
-  <!-- Firebase -->
-  <script type="module" src="js/firebase.js"></script>
+  <!-- GLOW PLANET -->
+  <div class="planet small"></div>
 
-  <!-- Auth Logic -->
-  <script type="module">
-    import { auth } from "./js/firebase.js";
-    import {
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword
-    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  <!-- AUTH LOGIC -->
+  <script type="module" src="js/auth.js"></script>
 
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const msg = document.getElementById("msg");
-
-    document.getElementById("signup").onclick = () => {
-      createUserWithEmailAndPassword(auth, email.value, password.value)
-        .then(() => {
-          window.location.href = "dashboard.html";
-        })
-        .catch(err => msg.textContent = err.message);
-    };
-
-    document.getElementById("login").onclick = () => {
-      signInWithEmailAndPassword(auth, email.value, password.value)
-        .then(() => {
-          window.location.href = "dashboard.html";
-        })
-        .catch(err => msg.textContent = err.message);
-    };
-  </script>
 </body>
 </html>
