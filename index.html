@@ -2,28 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Welcome</title>
+  <title>CloudVault</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body>
-  <p>Loading...</p>
+<body class="dark">
 
-  <!-- Firebase -->
-  <script type="module" src="js/firebase.js"></script>
+  <!-- NAVBAR -->
+  <nav class="nav">
+    <div class="logo">CloudVault</div>
+    <div class="nav-buttons">
+      <a href="login.html" class="btn-outline">Login</a>
+      <a href="login.html" class="btn-primary">Sign Up</a>
+    </div>
+  </nav>
 
-  <!-- Redirect Logic -->
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Secure Cloud Storage,<br><span>Reimagined</span></h1>
+    <p>
+      Upload, store, and access your files securely from anywhere.<br>
+      Built with modern cloud security and premium design.
+    </p>
+    <a href="login.html" class="btn-primary large">Get Started</a>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="feature">🔐 End-to-End Authentication</div>
+    <div class="feature">☁ Secure Cloud Storage</div>
+    <div class="feature">⚡ Fast & Reliable</div>
+    <div class="feature">🛡 Firebase-Backed Security</div>
+  </section>
+
+  <!-- GLOW PLANET -->
+  <div class="planet"></div>
+
+  <!-- AUTO REDIRECT IF LOGGED IN -->
   <script type="module">
     import { auth } from "./js/firebase.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     onAuthStateChanged(auth, user => {
-      if (user) {
-        window.location.href = "dashboard.html";
-      } else {
-        window.location.href = "login.html";
-      }
+      if (user) window.location.href = "dashboard.html";
     });
   </script>
+
 </body>
 </html>
