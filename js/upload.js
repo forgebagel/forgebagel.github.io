@@ -88,7 +88,14 @@ task.on("state_changed",
 
 
 /* LOGOUT */
-logoutBtn.onclick = () => {
-  alert("Logout button clicked");
+const logoutBtn = document.getElementById("logoutBtn");
+
+logoutBtn.onclick = async () => {
+  try {
+    await signOut(auth);
+    window.location.href = "login.html";
+  } catch (e) {
+    alert(e.message);
+  }
 };
 
