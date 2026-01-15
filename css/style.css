@@ -194,6 +194,21 @@ body.dark {
     opacity: 1;
   }
 }
+.strength {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+#strength-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
 
 
 
