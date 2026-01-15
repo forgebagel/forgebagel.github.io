@@ -49,4 +49,21 @@ if (passwordInput) {
       "#4fc3ff";
   });
 }
+import { sendPasswordResetEmail } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const resetBtn = document.getElementById("resetPassword");
+
+if (resetBtn) {
+  resetBtn.addEventListener("click", async () => {
+    const email = document.getElementById("email").value;
+    if (!email) {
+      alert("Enter your email first");
+      return;
+    }
+    await sendPasswordResetEmail(auth, email);
+    alert("Password reset email sent");
+  });
+}
+
 
