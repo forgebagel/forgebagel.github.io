@@ -1,5 +1,7 @@
 import { auth, storage } from "./firebase.js";
 import {
+  console.log("upload.js loaded");
+
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
