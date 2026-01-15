@@ -1,3 +1,19 @@
+import { auth } from "./firebase.js";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const signupBtn = document.getElementById("signupBtn");
+const loginBtn = document.getElementById("loginBtn");
+const resetBtn = document.getElementById("resetPassword");
+
+/* SIGN UP */
 if (signupBtn) {
   signupBtn.onclick = async () => {
     try {
@@ -10,32 +26,8 @@ if (signupBtn) {
       await sendEmailVerification(cred.user);
 
       alert("Verification email sent. Please verify before login.");
-      await auth.signOut();
+      await signOut(auth); // ✅ CORRECT
 
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-}
-
-
-/* ELEMENTS */
-const email = document.getElementById("email");
-const password = document.getElementById("password");
-const signupBtn = document.getElementById("signupBtn");
-const loginBtn = document.getElementById("loginBtn");
-const resetBtn = document.getElementById("resetPassword");
-
-/* SIGN UP */
-if (signupBtn) {
-  signupBtn.onclick = async () => {
-    try {
-      await createUserWithEmailAndPassword(
-        auth,
-        email.value,
-        password.value
-      );
-      window.location.href = "dashboard.html";
     } catch (err) {
       alert(err.message);
     }
@@ -46,12 +38,20 @@ if (signupBtn) {
 if (loginBtn) {
   loginBtn.onclick = async () => {
     try {
-      await signInWithEmailAndPassword(
+      const cred = await signInWithEmailAndPassword(
         auth,
         email.value,
         password.value
       );
+
+      if (!cred.user.emailVerified) {
+        alert("Please verify your email first.");
+        await signOut(auth);
+        return;
+      }
+
       window.location.href = "dashboard.html";
+
     } catch (err) {
       alert(err.message);
     }
