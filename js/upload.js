@@ -68,15 +68,21 @@ async function loadFiles() {
 }
 
 /* UPLOAD */
-uploadBtn.onclick = () => {
-  const file = fileInput.files[0];
-  if (!file) return alert("Select a file");
+const uploadBar = document.getElementById("uploadBar");
 
-  const fileRef = ref(storage, `uploads/${currentUser.uid}/${file.name}`);
-  const task = uploadBytesResumable(fileRef, file);
+task.on("state_changed",
+  snap => {
+    const percent = (snap.bytesTransferred / snap.totalBytes) * 100;
+    uploadBar.style.width = percent + "%";
+    uploadBar.style.background = "#4fc3ff";
+  },
+  err => alert(err),
+  () => {
+    uploadBar.style.width = "0%";
+    loadFiles();
+  }
+);
 
-  task.on("state_changed", null, alert, loadFiles);
-};
 
 /* LOGOUT */
 logoutBtn.onclick = async () => {
