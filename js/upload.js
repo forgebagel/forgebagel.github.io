@@ -23,8 +23,8 @@ onAuthStateChanged(auth, user => {
   }
 
   if (!user.emailVerified) {
-    alert("Please verify your email before accessing the dashboard.");
-    auth.signOut();
+    alert("Please verify your email.");
+    signOut(auth);
     window.location.href = "login.html";
     return;
   }
@@ -32,6 +32,7 @@ onAuthStateChanged(auth, user => {
   status.textContent = "Welcome to your dashboard";
   emailText.textContent = "Signed in as: " + user.email;
 });
+
 
 
 /* UPLOAD */
