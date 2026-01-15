@@ -28,4 +28,25 @@ export function logout() {
   signOut(auth).then(() => {
     window.location.href = "login.html";
   });
+}const passwordInput = document.getElementById("password");
+const bar = document.getElementById("strength-bar");
+
+if (passwordInput) {
+  passwordInput.addEventListener("input", () => {
+    const val = passwordInput.value;
+    let strength = 0;
+
+    if (val.length >= 6) strength += 30;
+    if (/[A-Z]/.test(val)) strength += 20;
+    if (/[0-9]/.test(val)) strength += 20;
+    if (/[^A-Za-z0-9]/.test(val)) strength += 30;
+
+    bar.style.width = strength + "%";
+
+    bar.style.background =
+      strength < 40 ? "red" :
+      strength < 70 ? "orange" :
+      "#4fc3ff";
+  });
 }
+
