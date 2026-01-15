@@ -1,10 +1,23 @@
-import { auth } from "./firebase.js";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+if (signupBtn) {
+  signupBtn.onclick = async () => {
+    try {
+      const cred = await createUserWithEmailAndPassword(
+        auth,
+        email.value,
+        password.value
+      );
+
+      await sendEmailVerification(cred.user);
+
+      alert("Verification email sent. Please verify before login.");
+      await auth.signOut();
+
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+}
+
 
 /* ELEMENTS */
 const email = document.getElementById("email");
