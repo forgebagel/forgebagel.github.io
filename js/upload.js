@@ -6,7 +6,10 @@ import {
 
 import {
   ref,
-  uploadBytes
+  uploadBytesResumable,
+  listAll,
+  getDownloadURL,
+  deleteObject
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const status = document.getElementById("status");
@@ -14,36 +17,65 @@ const emailText = document.getElementById("userEmail");
 const fileInput = document.getElementById("fileInput");
 const uploadBtn = document.getElementById("uploadBtn");
 const logoutBtn = document.getElementById("logoutBtn");
+const fileList = document.getElementById("fileList");
 
-/* AUTH CHECK */
+let currentUser;
+
+/* AUTH */
 onAuthStateChanged(auth, user => {
-  if (!user) {
+  if (!user || !user.emailVerified) {
     window.location.href = "login.html";
     return;
   }
 
-  if (!user.emailVerified) {
-    alert("Please verify your email.");
-    signOut(auth);
-    window.location.href = "login.html";
-    return;
-  }
-
+  currentUser = user;
   status.textContent = "Welcome to your dashboard";
-  emailText.textContent = "Signed in as: " + user.email;
+  emailText.textContent = user.email;
+
+  loadFiles();
 });
 
+/* LOAD FILES */
+async function loadFiles() {
+  fileList.innerHTML = "";
+  const folderRef = ref(storage, `uploads/${currentUser.uid}`);
+  const res = await listAll(folderRef);
 
+  res.items.forEach(async item => {
+    const url = await getDownloadURL(item);
+
+    const div = document.createElement("div");
+    div.className = "file-card";
+
+    div.innerHTML = `
+      <span>${item.name}</span>
+      <div class="file-actions">
+        <button class="btn-outline">Download</button>
+        <button class="btn-outline">Delete</button>
+      </div>
+    `;
+
+    const [downloadBtn, deleteBtn] = div.querySelectorAll("button");
+
+    downloadBtn.onclick = () => window.open(url);
+    deleteBtn.onclick = async () => {
+      await deleteObject(item);
+      loadFiles();
+    };
+
+    fileList.appendChild(div);
+  });
+}
 
 /* UPLOAD */
-uploadBtn.onclick = async () => {
+uploadBtn.onclick = () => {
   const file = fileInput.files[0];
   if (!file) return alert("Select a file");
 
-  const fileRef = ref(storage, `uploads/${auth.currentUser.uid}/${file.name}`);
-  await uploadBytes(fileRef, file);
+  const fileRef = ref(storage, `uploads/${currentUser.uid}/${file.name}`);
+  const task = uploadBytesResumable(fileRef, file);
 
-  alert("File uploaded successfully");
+  task.on("state_changed", null, alert, loadFiles);
 };
 
 /* LOGOUT */
