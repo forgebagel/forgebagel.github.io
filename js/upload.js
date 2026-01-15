@@ -1,3 +1,4 @@
+alert("upload.js loaded");
 import { auth, storage } from "./firebase.js";
 import {
   console.log("upload.js loaded");
