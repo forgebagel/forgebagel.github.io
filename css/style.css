@@ -269,6 +269,47 @@ body.dark {
     gap: 10px;
   }
 }
+.file-list {
+  margin-top: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.file-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.08);
+  padding: 14px 16px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.file-card span {
+  color: #fff;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.file-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.file-actions button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #4fc3ff;
+  background: transparent;
+  color: #4fc3ff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.file-actions button:hover {
+  background: #4fc3ff;
+  color: #000;
+}
 
 
 
