@@ -1,125 +1,625 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Secure Chat</title>
-</head>
-<body>
-  <h2>🔥 Secure Chat App</h2>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WA Link Generator — Direct WhatsApp Link Tool</title>
+  <meta name="description" content="Generate WhatsApp direct links with pre-filled messages instantly. No login needed. 100% free and client-side." />
 
-  <!-- LOGIN -->
-  <div id="loginBox">
-    <input type="email" id="email" placeholder="Email"><br><br>
-    <input type="password" id="password" placeholder="Password"><br><br>
-    <button onclick="signUp()">Sign Up</button>
-    <button onclick="login()">Login</button>
-  </div>
-
-  <!-- CHAT -->
-  <div id="chatBox" style="display:none;">
-    <p id="userInfo"></p>
-
-    <div id="messages" style="border:1px solid black;height:250px;overflow:auto;"></div><br>
-
-    <input type="text" id="messageInput" placeholder="Type message">
-    <button onclick="sendMessage()">Send</button>
-    <button onclick="logout()">Logout</button>
-  </div>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
+  <!-- Tailwind CSS CDN with custom config -->
   <script>
-    // 🔥 REPLACE THIS WITH YOUR FIREBASE CONFIG
-    const firebaseConfig = {
-      apiKey: "AIzaSyAa25GuV8tcc1SAXgee5zcL_7hCCrkJTSA",
-  authDomain: "my-project-65a0a.firebaseapp.com",
-  projectId: "my-project-65a0a",
-  storageBucket: "my-project-65a0a.firebasestorage.app",
-  messagingSenderId: "797156294935",
-  appId: "1:797156294935:web:85ef3c3ea0ffa20abeb752",
-  measurementId: "G-MZNGDVPPYX"
-      apiKey: "PASTE_YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "PASTE_ID",
-      appId: "PASTE_APP_ID"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-
-    // SIGN UP
-    function signUp() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      auth.createUserWithEmailAndPassword(email, password)
-        .catch(error => alert(error.message));
-    }
-
-    // LOGIN
-    function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      auth.signInWithEmailAndPassword(email, password)
-        .catch(error => alert(error.message));
-    }
-
-    // LOGOUT
-    function logout() {
-      auth.signOut();
-    }
-
-    // AUTH STATE
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("chatBox").style.display = "block";
-        document.getElementById("userInfo").innerText = "Logged in as: " + user.email;
-        loadMessages();
-      } else {
-        document.getElementById("loginBox").style.display = "block";
-        document.getElementById("chatBox").style.display = "none";
+    window.tailwind = window.tailwind || {};
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            wa: {
+              green: '#25D366',
+              dark: '#128C7E',
+              darker: '#075E54',
+              light: '#DCF8C6',
+              teal: '#34B7F1',
+            }
+          },
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+          boxShadow: {
+            glow: '0 0 30px rgba(37,211,102,0.18)',
+            'glow-lg': '0 0 60px rgba(37,211,102,0.22)',
+            card: '0 2px 24px 0 rgba(0,0,0,0.07)',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(24px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            pulse2: {
+              '0%,100%': { boxShadow: '0 0 0 0 rgba(37,211,102,0.3)' },
+              '50%': { boxShadow: '0 0 0 10px rgba(37,211,102,0)' },
+            },
+            scanline: {
+              '0%': { backgroundPosition: '0 0' },
+              '100%': { backgroundPosition: '0 100%' },
+            }
+          },
+          animation: {
+            fadeUp: 'fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both',
+            pulse2: 'pulse2 1.8s infinite',
+            scanline: 'scanline 3s linear infinite',
+          }
+        }
       }
-    });
-
-    // SEND MESSAGE
-    function sendMessage() {
-      const text = document.getElementById("messageInput").value;
-
-      if (text.trim() === "") return;
-
-      db.collection("messages").add({
-        text: text,
-        uid: auth.currentUser.uid,
-        email: auth.currentUser.email,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      document.getElementById("messageInput").value = "";
-    }
-
-    // LOAD MESSAGES
-    function loadMessages() {
-      db.collection("messages")
-        .orderBy("createdAt")
-        .onSnapshot(snapshot => {
-          const messagesDiv = document.getElementById("messages");
-          messagesDiv.innerHTML = "";
-          snapshot.forEach(doc => {
-            const msg = doc.data();
-            messagesDiv.innerHTML += `<p><b>${msg.email}:</b> ${msg.text}</p>`;
-          });
-          messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        });
     }
   </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: #f3f4f6;
+      min-height: 100vh;
+    }
+
+    /* Dot grid background */
+    .dot-bg {
+      background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #25D366; border-radius: 999px; }
+
+    /* Gradient border card */
+    .gradient-border {
+      position: relative;
+      background: white;
+      border-radius: 20px;
+    }
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: 21px;
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 50%, #34B7F1 100%);
+      z-index: -1;
+      opacity: 0.55;
+    }
+
+    /* Floating label inputs */
+    .field-wrap { position: relative; }
+    .field-wrap label {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.875rem;
+      color: #9ca3af;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      background: white;
+      padding: 0 4px;
+    }
+    .field-wrap textarea ~ label { top: 18px; transform: none; }
+    .field-wrap input:focus ~ label,
+    .field-wrap input:not(:placeholder-shown) ~ label,
+    .field-wrap textarea:focus ~ label,
+    .field-wrap textarea:not(:placeholder-shown) ~ label {
+      top: -10px;
+      transform: none;
+      font-size: 0.75rem;
+      color: #25D366;
+    }
+    .field-wrap input,
+    .field-wrap textarea {
+      width: 100%;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      background: white;
+      color: #111827;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field-wrap input:focus,
+    .field-wrap textarea:focus { border-color: #25D366; box-shadow: 0 0 0 3px rgba(37,211,102,0.12); }
+    .field-wrap textarea { resize: vertical; min-height: 96px; }
+
+    /* Phone group */
+    .phone-group {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+    .phone-group select {
+      border: 1.5px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      background: white;
+      color: #111827;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      flex-shrink: 0;
+      min-width: 120px;
+    }
+    .phone-group select:focus { border-color: #25D366; }
+    .phone-group .phone-input-wrap { flex: 1; position: relative; }
+    .phone-group .phone-input-wrap input {
+      height: 100%;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    /* Result reveal */
+    #result-section {
+      display: none;
+      opacity: 0;
+    }
+    #result-section.visible {
+      display: block;
+      animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+      opacity: 1;
+    }
+
+    /* Copy button states */
+    .btn-copy { transition: background 0.2s, color 0.2s; }
+    .btn-copy.copied { background: #25D366 !important; color: white !important; }
+
+    /* QR container */
+    #qr-box canvas, #qr-box img { border-radius: 12px; display: block; margin: 0 auto; }
+
+    /* Checklist items */
+    .check-item::before {
+      content: '✓';
+      display: inline-flex;
+      width: 20px;
+      height: 20px;
+      background: #DCF8C6;
+      color: #128C7E;
+      border-radius: 50%;
+      font-size: 11px;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Shimmer on hero badge */
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    .shimmer-text {
+      background: linear-gradient(90deg, #25D366 25%, #a7f3d0 50%, #25D366 75%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
+    }
+
+    /* Error shake */
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+    .shake { animation: shake 0.4s ease; }
+
+    /* Tooltip */
+    .tooltip { position: relative; }
+    .tooltip::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111827;
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .tooltip:hover::after { opacity: 1; }
+
+    /* Ticker */
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-track { animation: ticker 22s linear infinite; white-space: nowrap; display: inline-block; }
+    .ticker-track:hover { animation-play-state: paused; }
+  </style>
+</head>
+
+<body class="dot-bg">
+
+  <!-- ░░ HEADER ░░ -->
+  <header class="w-full bg-white/90 backdrop-blur border-b border-gray-100 sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <!-- WhatsApp logo -->
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:#25D366">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+            <path d="M16 3C9.37 3 4 8.37 4 15c0 2.47.74 4.77 2.01 6.7L4 29l7.52-1.97A11.93 11.93 0 0 0 16 27c6.63 0 12-5.37 12-12S22.63 3 16 3Z" fill="white"/>
+            <path d="M21.5 18.47c-.28-.14-1.65-.81-1.91-.9-.25-.09-.44-.14-.62.14-.18.28-.72.9-.88 1.09-.16.18-.32.2-.6.07-.28-.14-1.17-.43-2.23-1.37-.82-.73-1.38-1.63-1.54-1.9-.16-.28-.02-.43.12-.57.12-.12.28-.32.42-.48.14-.16.18-.28.28-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.49-.85-2.04-.22-.53-.45-.46-.62-.47h-.53c-.18 0-.48.07-.73.34-.25.28-.96.94-.96 2.28s.98 2.65 1.12 2.83c.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.57.65.2 1.25.18 1.72.11.52-.08 1.65-.67 1.88-1.32.23-.65.23-1.21.16-1.32-.07-.11-.25-.18-.53-.32Z" fill="#25D366"/>
+          </svg>
+        </div>
+        <span class="font-display font-700 text-gray-900 text-lg leading-none">WA<span class="text-wa-green">Link</span></span>
+      </div>
+      <div class="hidden sm:flex items-center gap-1 bg-wa-light/70 text-wa-dark text-xs font-semibold px-3 py-1.5 rounded-full">
+        <span class="w-1.5 h-1.5 rounded-full bg-wa-green inline-block animate-pulse"></span>
+        100% Client-Side &middot; No Data Stored
+      </div>
+    </div>
+  </header>
+
+  <!-- ░░ HERO ░░ -->
+  <section class="max-w-5xl mx-auto px-4 pt-12 pb-6 text-center">
+    <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-wa-dark bg-wa-light/80 border border-wa-green/20 rounded-full px-4 py-1.5 mb-5">
+      <span>Free Tool</span>
+      <span class="opacity-40">·</span>
+      <span>No Signup</span>
+      <span class="opacity-40">·</span>
+      <span>Open Source Ready</span>
+    </div>
+    <h1 class="font-display font-extrabold text-gray-900 text-4xl sm:text-5xl leading-tight mb-4">
+      WhatsApp <span class="shimmer-text">Direct Link</span><br class="hidden sm:block" /> Generator
+    </h1>
+    <p class="text-gray-500 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
+      Create a wa.me link with a pre-filled message — share it anywhere to let anyone message you on WhatsApp in one tap.
+    </p>
+  </section>
+
+  <!-- ░░ MAIN CARD ░░ -->
+  <main class="max-w-2xl mx-auto px-4 pb-20">
+
+    <!-- Generator Card -->
+    <div class="gradient-border shadow-card mb-6 overflow-visible">
+      <div class="bg-white rounded-[20px] p-6 sm:p-8 space-y-6">
+
+        <div>
+          <h2 class="font-display font-bold text-gray-800 text-xl mb-1">Generate Your Link</h2>
+          <p class="text-gray-400 text-sm">Fill in the details below and hit Generate.</p>
+        </div>
+
+        <!-- Country + Phone -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Phone Number</label>
+          <div class="phone-group">
+            <select id="country-code" aria-label="Country code">
+              <option value="91">🇮🇳 +91</option>
+              <option value="1">🇺🇸 +1</option>
+              <option value="44">🇬🇧 +44</option>
+              <option value="61">🇦🇺 +61</option>
+              <option value="971">🇦🇪 +971</option>
+              <option value="65">🇸🇬 +65</option>
+              <option value="60">🇲🇾 +60</option>
+              <option value="49">🇩🇪 +49</option>
+              <option value="33">🇫🇷 +33</option>
+              <option value="81">🇯🇵 +81</option>
+              <option value="82">🇰🇷 +82</option>
+              <option value="86">🇨🇳 +86</option>
+              <option value="55">🇧🇷 +55</option>
+              <option value="52">🇲🇽 +52</option>
+              <option value="27">🇿🇦 +27</option>
+              <option value="234">🇳🇬 +234</option>
+              <option value="20">🇪🇬 +20</option>
+              <option value="92">🇵🇰 +92</option>
+              <option value="880">🇧🇩 +880</option>
+              <option value="94">🇱🇰 +94</option>
+              <option value="977">🇳🇵 +977</option>
+              <option value="966">🇸🇦 +966</option>
+              <option value="90">🇹🇷 +90</option>
+              <option value="98">🇮🇷 +98</option>
+              <option value="62">🇮🇩 +62</option>
+              <option value="63">🇵🇭 +63</option>
+              <option value="84">🇻🇳 +84</option>
+              <option value="66">🇹🇭 +66</option>
+              <option value="39">🇮🇹 +39</option>
+              <option value="34">🇪🇸 +34</option>
+            </select>
+            <div class="phone-input-wrap">
+              <input
+                type="tel"
+                id="phone-number"
+                placeholder="98765 43210"
+                inputmode="numeric"
+                maxlength="15"
+                autocomplete="tel-local"
+              />
+            </div>
+          </div>
+          <p id="phone-error" class="text-red-500 text-xs mt-1.5 hidden flex items-center gap-1">
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-1-9a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V6a1 1 0 0 0-1-1Z" clip-rule="evenodd"/></svg>
+            Please enter a valid phone number (5–15 digits).
+          </p>
+        </div>
+
+        <!-- Message -->
+        <div class="field-wrap">
+          <textarea id="message" placeholder=" " rows="4"></textarea>
+          <label for="message">Optional pre-filled message…</label>
+        </div>
+
+        <!-- Generate Button -->
+        <button
+          id="btn-generate"
+          onclick="generateLink()"
+          class="w-full py-4 rounded-2xl font-display font-bold text-white text-lg tracking-wide transition-all duration-200 hover:brightness-110 active:scale-[0.98] animate-pulse2"
+          style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); box-shadow: 0 4px 20px rgba(37,211,102,0.35);"
+        >
+          ⚡ Generate WhatsApp Link
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ░░ RESULT SECTION ░░ -->
+    <div id="result-section">
+      <div class="gradient-border shadow-card overflow-visible">
+        <div class="bg-white rounded-[20px] p-6 sm:p-8 space-y-6">
+
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#DCF8C6">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="#25D366"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0Z" clip-rule="evenodd"/></svg>
+            </div>
+            <h2 class="font-display font-bold text-gray-800 text-xl">Your Link is Ready!</h2>
+          </div>
+
+          <!-- Link display -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Generated Link</label>
+            <div class="flex gap-2 items-center">
+              <input
+                type="text"
+                id="generated-link"
+                readonly
+                class="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 bg-gray-50 font-mono outline-none select-all cursor-text"
+                placeholder=""
+              />
+              <button
+                id="btn-copy"
+                onclick="copyLink()"
+                class="btn-copy tooltip flex-shrink-0 border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-600 bg-white hover:bg-gray-50 transition-all"
+                data-tip="Copy to clipboard"
+              >
+                <span id="copy-label">Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Open in WhatsApp -->
+          <a
+            id="btn-open"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center justify-center gap-3 w-full py-4 rounded-2xl font-display font-bold text-white text-base transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
+            style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); box-shadow: 0 4px 20px rgba(37,211,102,0.3);"
+          >
+            <!-- WhatsApp SVG -->
+            <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+              <path d="M16 3C9.37 3 4 8.37 4 15c0 2.47.74 4.77 2.01 6.7L4 29l7.52-1.97A11.93 11.93 0 0 0 16 27c6.63 0 12-5.37 12-12S22.63 3 16 3Z" fill="white" fill-opacity="0.9"/>
+              <path d="M21.5 18.47c-.28-.14-1.65-.81-1.91-.9-.25-.09-.44-.14-.62.14-.18.28-.72.9-.88 1.09-.16.18-.32.2-.6.07-.28-.14-1.17-.43-2.23-1.37-.82-.73-1.38-1.63-1.54-1.9-.16-.28-.02-.43.12-.57.12-.12.28-.32.42-.48.14-.16.18-.28.28-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.49-.85-2.04-.22-.53-.45-.46-.62-.47h-.53c-.18 0-.48.07-.73.34-.25.28-.96.94-.96 2.28s.98 2.65 1.12 2.83c.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.57.65.2 1.25.18 1.72.11.52-.08 1.65-.67 1.88-1.32.23-.65.23-1.21.16-1.32-.07-.11-.25-.18-.53-.32Z" fill="#25D366"/>
+            </svg>
+            Open in WhatsApp
+          </a>
+
+          <!-- QR Code -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">QR Code</label>
+            <div class="flex flex-col items-center gap-4">
+              <div id="qr-box" class="p-3 border border-gray-100 rounded-2xl bg-white shadow-inner inline-block"></div>
+              <button
+                onclick="downloadQR()"
+                class="tooltip inline-flex items-center gap-2 text-sm font-semibold text-wa-dark border border-wa-green/30 rounded-xl px-5 py-2.5 bg-wa-light/60 hover:bg-wa-light transition-all"
+                data-tip="Save as PNG"
+              >
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" class="text-wa-dark"><path fill-rule="evenodd" d="M3 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Zm3.293-7.707a1 1 0 0 1 1.414 0L9 10.586V3a1 1 0 0 1 2 0v7.586l1.293-1.293a1 1 0 1 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 0-1.414Z" clip-rule="evenodd"/></svg>
+                Download QR Code
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ░░ HOW IT WORKS ░░ -->
+    <div class="mt-8 bg-white rounded-2xl shadow-card border border-gray-100 p-6 sm:p-8">
+      <h3 class="font-display font-bold text-gray-800 text-lg mb-4">How it works</h3>
+      <ol class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center text-white" style="background:#25D366">1</span>
+          <span>Enter the recipient's <strong>country code</strong> and <strong>phone number</strong> (without spaces or dashes).</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center text-white" style="background:#25D366">2</span>
+          <span>Optionally type a <strong>pre-filled message</strong> — it'll auto-fill when the chat opens.</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center text-white" style="background:#25D366">3</span>
+          <span>Click <strong>Generate</strong>, then copy the link or scan the QR code to share anywhere.</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- ░░ FEATURES ░░ -->
+    <div class="mt-5 grid sm:grid-cols-3 gap-4">
+      <div class="bg-white rounded-2xl shadow-card border border-gray-100 p-5">
+        <div class="text-2xl mb-2">🔒</div>
+        <div class="font-semibold text-gray-800 text-sm mb-1">100% Private</div>
+        <div class="text-gray-400 text-xs">Everything runs in your browser. Zero data leaves your device.</div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-card border border-gray-100 p-5">
+        <div class="text-2xl mb-2">⚡</div>
+        <div class="font-semibold text-gray-800 text-sm mb-1">Instant QR Code</div>
+        <div class="text-gray-400 text-xs">A scannable QR is generated automatically — download as PNG.</div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-card border border-gray-100 p-5">
+        <div class="text-2xl mb-2">🌍</div>
+        <div class="font-semibold text-gray-800 text-sm mb-1">30+ Countries</div>
+        <div class="text-gray-400 text-xs">Country codes for India, US, UK, UAE, Australia and many more.</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ░░ FOOTER / TICKER ░░ -->
+  <footer class="border-t border-gray-200 bg-white overflow-hidden py-3">
+    <div class="overflow-hidden text-xs text-gray-400 font-medium">
+      <div class="ticker-track">
+        &nbsp;&nbsp;&nbsp;✦ wa.me links open WhatsApp directly &nbsp;·&nbsp; Works on Android, iOS and Desktop &nbsp;·&nbsp; No login required &nbsp;·&nbsp; Share via email, Instagram, Linktree or any bio link &nbsp;·&nbsp; Pre-filled messages save clicks &nbsp;·&nbsp; QR code works offline &nbsp;·&nbsp; 100% open source ready &nbsp;·&nbsp;&nbsp;&nbsp;✦ wa.me links open WhatsApp directly &nbsp;·&nbsp; Works on Android, iOS and Desktop &nbsp;·&nbsp; No login required &nbsp;·&nbsp; Share via email, Instagram, Linktree or any bio link &nbsp;·&nbsp; Pre-filled messages save clicks &nbsp;·&nbsp; QR code works offline &nbsp;·&nbsp; 100% open source ready &nbsp;·&nbsp;
+      </div>
+    </div>
+    <div class="text-center text-xs text-gray-400 mt-2 pb-1">
+      Built with ❤️ · Runs entirely in your browser · No tracking
+    </div>
+  </footer>
+
+  <!-- ░░ JAVASCRIPT ░░ -->
+  <script>
+    // ── Phone number cleanup
+    document.getElementById('phone-number').addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '');
+    });
+
+    // ── Generate link
+    function generateLink() {
+      const countryCode = document.getElementById('country-code').value.trim();
+      const phone = document.getElementById('phone-number').value.replace(/\D/g, '').trim();
+      const message = document.getElementById('message').value.trim();
+      const errorEl = document.getElementById('phone-error');
+      const phoneInput = document.getElementById('phone-number');
+
+      // Validate phone
+      if (!phone || phone.length < 5 || phone.length > 15) {
+        errorEl.classList.remove('hidden');
+        phoneInput.parentElement.classList.add('shake');
+        setTimeout(() => phoneInput.parentElement.classList.remove('shake'), 450);
+        return;
+      }
+      errorEl.classList.add('hidden');
+
+      const fullNumber = countryCode + phone;
+      let url = `https://wa.me/${fullNumber}`;
+      if (message) {
+        url += `?text=${encodeURIComponent(message)}`;
+      }
+
+      // Set values
+      document.getElementById('generated-link').value = url;
+      document.getElementById('btn-open').href = url;
+
+      // Reveal result section
+      const resultSection = document.getElementById('result-section');
+      resultSection.classList.add('visible');
+
+      // Scroll to result
+      setTimeout(() => {
+        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+
+      // Generate QR
+      generateQR(url);
+    }
+
+    // ── QR Code generation
+    let qrInstance = null;
+    function generateQR(url) {
+      const box = document.getElementById('qr-box');
+      box.innerHTML = '';
+
+      qrInstance = new QRCode(box, {
+        text: url,
+        width: 200,
+        height: 200,
+        colorDark: '#075E54',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+    }
+
+    // ── Copy link
+    async function copyLink() {
+      const link = document.getElementById('generated-link').value;
+      const btn = document.getElementById('btn-copy');
+      const label = document.getElementById('copy-label');
+
+      try {
+        await navigator.clipboard.writeText(link);
+        btn.classList.add('copied');
+        label.textContent = '✓ Copied!';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          label.textContent = 'Copy';
+        }, 2200);
+      } catch (err) {
+        // Fallback for older browsers
+        const input = document.getElementById('generated-link');
+        input.select();
+        document.execCommand('copy');
+        label.textContent = '✓ Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          label.textContent = 'Copy';
+        }, 2200);
+      }
+    }
+
+    // ── Download QR
+    function downloadQR() {
+      const box = document.getElementById('qr-box');
+      const canvas = box.querySelector('canvas');
+      const img = box.querySelector('img');
+
+      if (canvas) {
+        const link = document.createElement('a');
+        link.download = 'whatsapp-qr.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } else if (img) {
+        // QRCode.js fallback (some browsers render img instead of canvas)
+        const link = document.createElement('a');
+        link.download = 'whatsapp-qr.png';
+        link.href = img.src;
+        link.click();
+      }
+    }
+
+    // ── Allow Enter key to generate
+    document.getElementById('phone-number').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') generateLink();
+    });
+  </script>
+
 </body>
 </html>
