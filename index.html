@@ -3,94 +3,90 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WA Link Generator — Direct WhatsApp Link Tool</title>
-  <meta name="description" content="Generate WhatsApp direct links with pre-filled messages instantly. No login needed. 100% free and client-side." />
 
-  <!-- Tailwind CSS CDN with custom config -->
+  <title>WhatsApp Direct Link Generator — Free wa.me Link &amp; QR Code Tool</title>
+  <meta name="description" content="Generate a free WhatsApp direct link (wa.me) with a pre-filled message in seconds. No login. No data stored. Instant QR code included. Perfect for Indian small businesses, freelancers, and marketers." />
+  <meta name="keywords" content="whatsapp link generator, wa.me link, whatsapp direct link, whatsapp qr code, whatsapp pre filled message, india whatsapp business" />
+  <meta name="author" content="WALink Generator" />
+  <link rel="canonical" href="https://yourdomain.com/" />
+  <meta property="og:title" content="WhatsApp Direct Link Generator — Free wa.me Link &amp; QR Code Tool" />
+  <meta property="og:description" content="Create a free WhatsApp direct link with a custom pre-filled message. No login. Works for all countries. Instant QR code." />
+  <meta property="og:type" content="website" />
+
   <script>
     window.tailwind = window.tailwind || {};
-  </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
+    window.tailwind.config = {
+      production: true,
       theme: {
         extend: {
           colors: {
             wa: {
-              green: '#25D366',
-              dark: '#128C7E',
+              green:  '#25D366',
+              dark:   '#128C7E',
               darker: '#075E54',
-              light: '#DCF8C6',
-              teal: '#34B7F1',
+              light:  '#DCF8C6',
+              teal:   '#34B7F1',
             }
           },
           fontFamily: {
             display: ['Syne', 'sans-serif'],
-            body: ['DM Sans', 'sans-serif'],
+            body:    ['DM Sans', 'sans-serif'],
           },
           boxShadow: {
-            glow: '0 0 30px rgba(37,211,102,0.18)',
-            'glow-lg': '0 0 60px rgba(37,211,102,0.22)',
-            card: '0 2px 24px 0 rgba(0,0,0,0.07)',
+            glow:     '0 0 30px rgba(37,211,102,0.18)',
+            'glow-lg':'0 0 60px rgba(37,211,102,0.22)',
+            card:     '0 2px 24px 0 rgba(0,0,0,0.07)',
           },
           keyframes: {
             fadeUp: {
-              '0%': { opacity: '0', transform: 'translateY(24px)' },
+              '0%':   { opacity: '0', transform: 'translateY(24px)' },
               '100%': { opacity: '1', transform: 'translateY(0)' },
             },
             pulse2: {
               '0%,100%': { boxShadow: '0 0 0 0 rgba(37,211,102,0.3)' },
-              '50%': { boxShadow: '0 0 0 10px rgba(37,211,102,0)' },
+              '50%':     { boxShadow: '0 0 0 10px rgba(37,211,102,0)' },
             },
-            scanline: {
-              '0%': { backgroundPosition: '0 0' },
-              '100%': { backgroundPosition: '0 100%' },
-            }
           },
           animation: {
             fadeUp: 'fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both',
             pulse2: 'pulse2 1.8s infinite',
-            scanline: 'scanline 3s linear infinite',
           }
         }
       }
-    }
+    };
   </script>
+  <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
 
-  <!-- QRCode.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'DM Sans', sans-serif;
       background-color: #f3f4f6;
       min-height: 100vh;
+      color: #374151;
     }
 
-    /* Dot grid background */
+    /* ── Dot grid background (preserved) */
     .dot-bg {
+      background-color: #f3f4f6;
       background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
       background-size: 22px 22px;
     }
 
-    /* Custom scrollbar */
+    /* ── Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #f1f1f1; }
     ::-webkit-scrollbar-thumb { background: #25D366; border-radius: 999px; }
 
-    /* Gradient border card */
-    .gradient-border {
-      position: relative;
-      background: white;
-      border-radius: 20px;
-    }
+    /* ── Gradient border card */
+    .gradient-border { position: relative; background: white; border-radius: 20px; }
     .gradient-border::before {
       content: '';
       position: absolute;
@@ -98,15 +94,14 @@
       border-radius: 21px;
       background: linear-gradient(135deg, #25D366 0%, #128C7E 50%, #34B7F1 100%);
       z-index: -1;
-      opacity: 0.55;
+      opacity: 0.5;
     }
 
-    /* Floating label inputs */
+    /* ── Floating label inputs */
     .field-wrap { position: relative; }
     .field-wrap label {
       position: absolute;
-      left: 14px;
-      top: 50%;
+      left: 14px; top: 50%;
       transform: translateY(-50%);
       font-size: 0.875rem;
       color: #9ca3af;
@@ -114,111 +109,75 @@
       transition: all 0.2s ease;
       background: white;
       padding: 0 4px;
+      z-index: 1;
     }
     .field-wrap textarea ~ label { top: 18px; transform: none; }
     .field-wrap input:focus ~ label,
     .field-wrap input:not(:placeholder-shown) ~ label,
     .field-wrap textarea:focus ~ label,
     .field-wrap textarea:not(:placeholder-shown) ~ label {
-      top: -10px;
-      transform: none;
-      font-size: 0.75rem;
-      color: #25D366;
+      top: -10px; transform: none;
+      font-size: 0.72rem; color: #25D366; font-weight: 600;
     }
-    .field-wrap input,
-    .field-wrap textarea {
+    .field-wrap input, .field-wrap textarea {
       width: 100%;
       border: 1.5px solid #e5e7eb;
       border-radius: 12px;
       padding: 14px 16px;
       font-family: 'DM Sans', sans-serif;
       font-size: 0.95rem;
-      background: white;
-      color: #111827;
+      background: white; color: #111827;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     .field-wrap input:focus,
     .field-wrap textarea:focus { border-color: #25D366; box-shadow: 0 0 0 3px rgba(37,211,102,0.12); }
     .field-wrap textarea { resize: vertical; min-height: 96px; }
 
-    /* Phone group */
-    .phone-group {
-      display: flex;
-      gap: 10px;
-      align-items: stretch;
-    }
+    /* ── Phone group */
+    .phone-group { display: flex; gap: 10px; align-items: stretch; }
     .phone-group select {
-      border: 1.5px solid #e5e7eb;
-      border-radius: 12px;
+      border: 1.5px solid #e5e7eb; border-radius: 12px;
       padding: 14px 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      background: white;
-      color: #111827;
-      outline: none;
-      cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      background: white; color: #111827;
+      outline: none; cursor: pointer;
       transition: border-color 0.2s;
-      flex-shrink: 0;
-      min-width: 120px;
+      flex-shrink: 0; min-width: 122px;
     }
     .phone-group select:focus { border-color: #25D366; }
-    .phone-group .phone-input-wrap { flex: 1; position: relative; }
-    .phone-group .phone-input-wrap input {
-      height: 100%;
-      border-radius: 12px;
-      padding: 14px 16px;
-    }
+    .phone-group .phone-input-wrap { flex: 1; }
+    .phone-group .phone-input-wrap input { height: 100%; border-radius: 12px; padding: 14px 16px; }
 
-    /* Result reveal */
-    #result-section {
-      display: none;
-      opacity: 0;
-    }
+    /* ── Result reveal */
+    #result-section { display: none; opacity: 0; }
     #result-section.visible {
       display: block;
       animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
       opacity: 1;
     }
 
-    /* Copy button states */
-    .btn-copy { transition: background 0.2s, color 0.2s; }
-    .btn-copy.copied { background: #25D366 !important; color: white !important; }
+    /* ── Copy button flash */
+    .btn-copy { transition: background 0.2s, color 0.2s, border-color 0.2s; }
+    .btn-copy.copied { background: #25D366 !important; color: white !important; border-color: #25D366 !important; }
 
-    /* QR container */
-    #qr-box canvas, #qr-box img { border-radius: 12px; display: block; margin: 0 auto; }
+    /* ── QR */
+    #qr-box canvas, #qr-box img { border-radius: 10px; display: block; margin: 0 auto; }
 
-    /* Checklist items */
-    .check-item::before {
-      content: '✓';
-      display: inline-flex;
-      width: 20px;
-      height: 20px;
-      background: #DCF8C6;
-      color: #128C7E;
-      border-radius: 50%;
-      font-size: 11px;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      margin-right: 8px;
-      flex-shrink: 0;
-    }
-
-    /* Shimmer on hero badge */
+    /* ── Shimmer hero text */
     @keyframes shimmer {
-      0% { background-position: -200% center; }
-      100% { background-position: 200% center; }
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
     }
     .shimmer-text {
       background: linear-gradient(90deg, #25D366 25%, #a7f3d0 50%, #25D366 75%);
       background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shimmer 3s linear infinite;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3.2s linear infinite;
     }
 
-    /* Error shake */
+    /* ── Error shake */
     @keyframes shake {
       0%,100% { transform: translateX(0); }
       20% { transform: translateX(-6px); }
@@ -228,90 +187,119 @@
     }
     .shake { animation: shake 0.4s ease; }
 
-    /* Tooltip */
+    /* ── Tooltip */
     .tooltip { position: relative; }
     .tooltip::after {
       content: attr(data-tip);
       position: absolute;
-      bottom: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: #111827;
-      color: #fff;
-      font-size: 0.72rem;
-      padding: 4px 10px;
-      border-radius: 6px;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
+      bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      background: #111827; color: #fff;
+      font-size: 0.7rem; padding: 4px 10px; border-radius: 6px;
+      white-space: nowrap; opacity: 0; pointer-events: none;
       transition: opacity 0.2s;
     }
     .tooltip:hover::after { opacity: 1; }
 
-    /* Ticker */
+    /* ── Ticker */
     @keyframes ticker {
-      0% { transform: translateX(0); }
+      0%   { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
-    .ticker-track { animation: ticker 22s linear infinite; white-space: nowrap; display: inline-block; }
+    .ticker-track { animation: ticker 26s linear infinite; white-space: nowrap; display: inline-block; }
     .ticker-track:hover { animation-play-state: paused; }
+
+    /* ── Wave SVG divider */
+    .wave-divider { overflow: hidden; line-height: 0; }
+    .wave-divider svg { display: block; width: 100%; height: 52px; }
+
+    /* ── SEO Article typography */
+    .seo-article h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: #111827;
+      margin-bottom: 0.625rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      line-height: 1.4;
+    }
+    .seo-article p {
+      color: #4b5563;
+      font-size: 0.9375rem;
+      line-height: 1.8;
+    }
+    .seo-article p + p { margin-top: 0.75rem; }
+    .seo-article strong { color: #128C7E; font-weight: 600; }
+    .seo-article code {
+      font-size: 0.78em;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      border-radius: 5px;
+      padding: 1px 6px;
+      font-family: 'Courier New', monospace;
+      color: #374151;
+    }
+
+    /* ── Privacy trust badges */
+    .trust-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: #f0fdf4; border: 1px solid #bbf7d0;
+      color: #15803d; border-radius: 999px;
+      padding: 3px 11px;
+      font-size: 0.7rem; font-weight: 600;
+    }
   </style>
 </head>
 
 <body class="dot-bg">
 
-  <!-- ░░ HEADER ░░ -->
-  <header class="w-full bg-white/90 backdrop-blur border-b border-gray-100 sticky top-0 z-50">
+  <header class="w-full bg-white/90 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
     <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <!-- WhatsApp logo -->
-        <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:#25D366">
-          <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background:#25D366">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true">
             <path d="M16 3C9.37 3 4 8.37 4 15c0 2.47.74 4.77 2.01 6.7L4 29l7.52-1.97A11.93 11.93 0 0 0 16 27c6.63 0 12-5.37 12-12S22.63 3 16 3Z" fill="white"/>
             <path d="M21.5 18.47c-.28-.14-1.65-.81-1.91-.9-.25-.09-.44-.14-.62.14-.18.28-.72.9-.88 1.09-.16.18-.32.2-.6.07-.28-.14-1.17-.43-2.23-1.37-.82-.73-1.38-1.63-1.54-1.9-.16-.28-.02-.43.12-.57.12-.12.28-.32.42-.48.14-.16.18-.28.28-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.49-.85-2.04-.22-.53-.45-.46-.62-.47h-.53c-.18 0-.48.07-.73.34-.25.28-.96.94-.96 2.28s.98 2.65 1.12 2.83c.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.57.65.2 1.25.18 1.72.11.52-.08 1.65-.67 1.88-1.32.23-.65.23-1.21.16-1.32-.07-.11-.25-.18-.53-.32Z" fill="#25D366"/>
           </svg>
         </div>
-        <span class="font-display font-700 text-gray-900 text-lg leading-none">WA<span class="text-wa-green">Link</span></span>
+        <span class="font-display font-bold text-gray-900 text-lg leading-none tracking-tight">WA<span style="color:#25D366">Link</span></span>
       </div>
-      <div class="hidden sm:flex items-center gap-1 bg-wa-light/70 text-wa-dark text-xs font-semibold px-3 py-1.5 rounded-full">
-        <span class="w-1.5 h-1.5 rounded-full bg-wa-green inline-block animate-pulse"></span>
+      <div class="hidden sm:flex items-center gap-1.5 bg-green-50 border border-green-200 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block animate-pulse"></span>
         100% Client-Side &middot; No Data Stored
       </div>
     </div>
   </header>
 
-  <!-- ░░ HERO ░░ -->
-  <section class="max-w-5xl mx-auto px-4 pt-12 pb-6 text-center">
+
+  <section class="max-w-5xl mx-auto px-4 pt-12 pb-8 text-center">
     <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-wa-dark bg-wa-light/80 border border-wa-green/20 rounded-full px-4 py-1.5 mb-5">
-      <span>Free Tool</span>
-      <span class="opacity-40">·</span>
-      <span>No Signup</span>
-      <span class="opacity-40">·</span>
+      <span>Free Tool</span><span class="opacity-30">·</span>
+      <span>No Signup</span><span class="opacity-30">·</span>
       <span>Open Source Ready</span>
     </div>
-    <h1 class="font-display font-extrabold text-gray-900 text-4xl sm:text-5xl leading-tight mb-4">
+    <h1 class="font-display font-extrabold text-gray-900 text-4xl sm:text-5xl leading-tight mb-4 tracking-tight">
       WhatsApp <span class="shimmer-text">Direct Link</span><br class="hidden sm:block" /> Generator
     </h1>
     <p class="text-gray-500 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
-      Create a wa.me link with a pre-filled message — share it anywhere to let anyone message you on WhatsApp in one tap.
+      Create a <code class="text-sm bg-gray-100 text-gray-700 rounded px-1.5 py-0.5 font-mono">wa.me</code> link with a pre-filled message — share it anywhere so anyone can message you on WhatsApp in one tap.
     </p>
   </section>
 
-  <!-- ░░ MAIN CARD ░░ -->
-  <main class="max-w-2xl mx-auto px-4 pb-20">
 
-    <!-- Generator Card -->
-    <div class="gradient-border shadow-card mb-6 overflow-visible">
+  <main class="max-w-2xl mx-auto px-4 pb-16">
+
+    <div class="gradient-border shadow-card mb-6">
       <div class="bg-white rounded-[20px] p-6 sm:p-8 space-y-6">
 
         <div>
-          <h2 class="font-display font-bold text-gray-800 text-xl mb-1">Generate Your Link</h2>
-          <p class="text-gray-400 text-sm">Fill in the details below and hit Generate.</p>
+          <h2 class="font-display font-bold text-gray-800 text-xl mb-0.5">Generate Your Link</h2>
+          <p class="text-gray-400 text-sm">Fill in the details and click Generate.</p>
         </div>
 
-        <!-- Country + Phone -->
         <div>
-          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Phone Number</label>
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Phone Number</label>
           <div class="phone-group">
             <select id="country-code" aria-label="Country code">
               <option value="91">🇮🇳 +91</option>
@@ -347,33 +335,32 @@
             </select>
             <div class="phone-input-wrap">
               <input
-                type="tel"
-                id="phone-number"
+                type="tel" id="phone-number"
                 placeholder="98765 43210"
-                inputmode="numeric"
-                maxlength="15"
+                inputmode="numeric" maxlength="15"
                 autocomplete="tel-local"
+                aria-label="Phone number"
               />
             </div>
           </div>
           <p id="phone-error" class="text-red-500 text-xs mt-1.5 hidden flex items-center gap-1">
-            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-1-9a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V6a1 1 0 0 0-1-1Z" clip-rule="evenodd"/></svg>
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-1-9a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V6a1 1 0 0 0-1-1Z" clip-rule="evenodd"/>
+            </svg>
             Please enter a valid phone number (5–15 digits).
           </p>
         </div>
 
-        <!-- Message -->
         <div class="field-wrap">
-          <textarea id="message" placeholder=" " rows="4"></textarea>
+          <textarea id="message" placeholder=" " rows="4" aria-label="Pre-filled message"></textarea>
           <label for="message">Optional pre-filled message…</label>
         </div>
 
-        <!-- Generate Button -->
         <button
           id="btn-generate"
           onclick="generateLink()"
           class="w-full py-4 rounded-2xl font-display font-bold text-white text-lg tracking-wide transition-all duration-200 hover:brightness-110 active:scale-[0.98] animate-pulse2"
-          style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); box-shadow: 0 4px 20px rgba(37,211,102,0.35);"
+          style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); box-shadow: 0 4px 22px rgba(37,211,102,0.38);"
         >
           ⚡ Generate WhatsApp Link
         </button>
@@ -381,68 +368,64 @@
       </div>
     </div>
 
-    <!-- ░░ RESULT SECTION ░░ -->
-    <div id="result-section">
-      <div class="gradient-border shadow-card overflow-visible">
+
+    <div id="result-section" role="region" aria-label="Generated link" aria-live="polite">
+      <div class="gradient-border shadow-card">
         <div class="bg-white rounded-[20px] p-6 sm:p-8 space-y-6">
 
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#DCF8C6">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="#25D366"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0Z" clip-rule="evenodd"/></svg>
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:#DCF8C6">
+              <svg width="17" height="17" viewBox="0 0 20 20" fill="#25D366" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0Z" clip-rule="evenodd"/>
+              </svg>
             </div>
             <h2 class="font-display font-bold text-gray-800 text-xl">Your Link is Ready!</h2>
           </div>
 
-          <!-- Link display -->
           <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Generated Link</label>
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Generated Link</label>
             <div class="flex gap-2 items-center">
               <input
-                type="text"
-                id="generated-link"
-                readonly
+                type="text" id="generated-link" readonly
                 class="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 bg-gray-50 font-mono outline-none select-all cursor-text"
-                placeholder=""
+                aria-label="Generated WhatsApp link"
               />
               <button
-                id="btn-copy"
-                onclick="copyLink()"
-                class="btn-copy tooltip flex-shrink-0 border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-600 bg-white hover:bg-gray-50 transition-all"
-                data-tip="Copy to clipboard"
+                id="btn-copy" onclick="copyLink()"
+                class="btn-copy tooltip flex-shrink-0 border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-600 bg-white hover:bg-gray-50"
+                data-tip="Copy to clipboard" aria-label="Copy link"
               >
                 <span id="copy-label">Copy</span>
               </button>
             </div>
           </div>
 
-          <!-- Open in WhatsApp -->
           <a
-            id="btn-open"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
+            id="btn-open" href="#"
+            target="_blank" rel="noopener noreferrer"
             class="flex items-center justify-center gap-3 w-full py-4 rounded-2xl font-display font-bold text-white text-base transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
             style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); box-shadow: 0 4px 20px rgba(37,211,102,0.3);"
           >
-            <!-- WhatsApp SVG -->
-            <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
-              <path d="M16 3C9.37 3 4 8.37 4 15c0 2.47.74 4.77 2.01 6.7L4 29l7.52-1.97A11.93 11.93 0 0 0 16 27c6.63 0 12-5.37 12-12S22.63 3 16 3Z" fill="white" fill-opacity="0.9"/>
+            <svg width="23" height="23" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <path d="M16 3C9.37 3 4 8.37 4 15c0 2.47.74 4.77 2.01 6.7L4 29l7.52-1.97A11.93 11.93 0 0 0 16 27c6.63 0 12-5.37 12-12S22.63 3 16 3Z" fill="white" fill-opacity="0.88"/>
               <path d="M21.5 18.47c-.28-.14-1.65-.81-1.91-.9-.25-.09-.44-.14-.62.14-.18.28-.72.9-.88 1.09-.16.18-.32.2-.6.07-.28-.14-1.17-.43-2.23-1.37-.82-.73-1.38-1.63-1.54-1.9-.16-.28-.02-.43.12-.57.12-.12.28-.32.42-.48.14-.16.18-.28.28-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.49-.85-2.04-.22-.53-.45-.46-.62-.47h-.53c-.18 0-.48.07-.73.34-.25.28-.96.94-.96 2.28s.98 2.65 1.12 2.83c.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.57.65.2 1.25.18 1.72.11.52-.08 1.65-.67 1.88-1.32.23-.65.23-1.21.16-1.32-.07-.11-.25-.18-.53-.32Z" fill="#25D366"/>
             </svg>
             Open in WhatsApp
           </a>
 
-          <!-- QR Code -->
           <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">QR Code</label>
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Scan QR Code</label>
             <div class="flex flex-col items-center gap-4">
-              <div id="qr-box" class="p-3 border border-gray-100 rounded-2xl bg-white shadow-inner inline-block"></div>
+              <div id="qr-box" class="p-3 border border-gray-100 rounded-2xl bg-white shadow-sm inline-block"></div>
               <button
                 onclick="downloadQR()"
-                class="tooltip inline-flex items-center gap-2 text-sm font-semibold text-wa-dark border border-wa-green/30 rounded-xl px-5 py-2.5 bg-wa-light/60 hover:bg-wa-light transition-all"
-                data-tip="Save as PNG"
+                class="tooltip inline-flex items-center gap-2 text-sm font-semibold border rounded-xl px-5 py-2.5 transition-all"
+                style="color:#128C7E; background:#f0fdf4; border-color:#bbf7d0;"
+                data-tip="Save as PNG" aria-label="Download QR code"
               >
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" class="text-wa-dark"><path fill-rule="evenodd" d="M3 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Zm3.293-7.707a1 1 0 0 1 1.414 0L9 10.586V3a1 1 0 0 1 2 0v7.586l1.293-1.293a1 1 0 1 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 0-1.414Z" clip-rule="evenodd"/></svg>
+                <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M3 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Zm3.293-7.707a1 1 0 0 1 1.414 0L9 10.586V3a1 1 0 0 1 2 0v7.586l1.293-1.293a1 1 0 1 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 0-1.414Z" clip-rule="evenodd"/>
+                </svg>
                 Download QR Code
               </button>
             </div>
@@ -452,174 +435,253 @@
       </div>
     </div>
 
-    <!-- ░░ HOW IT WORKS ░░ -->
-    <div class="mt-8 bg-white rounded-2xl shadow-card border border-gray-100 p-6 sm:p-8">
+
+    <div class="mt-6 bg-white rounded-2xl shadow-card border border-gray-100 p-6 sm:p-8">
       <h3 class="font-display font-bold text-gray-800 text-lg mb-4">How it works</h3>
-      <ol class="space-y-3 text-sm text-gray-600">
+      <ol class="space-y-3.5 text-sm text-gray-600">
         <li class="flex items-start gap-3">
           <span class="flex-shrink-0 w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center text-white" style="background:#25D366">1</span>
-          <span>Enter the recipient's <strong>country code</strong> and <strong>phone number</strong> (without spaces or dashes).</span>
+          <span>Select your <strong class="text-gray-700">country code</strong> and enter the <strong class="text-gray-700">WhatsApp number</strong> (digits only, no spaces or dashes).</span>
         </li>
         <li class="flex items-start gap-3">
           <span class="flex-shrink-0 w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center text-white" style="background:#25D366">2</span>
-          <span>Optionally type a <strong>pre-filled message</strong> — it'll auto-fill when the chat opens.</span>
+          <span>Optionally type a <strong class="text-gray-700">pre-filled message</strong> — it loads automatically when the chat opens.</span>
         </li>
         <li class="flex items-start gap-3">
           <span class="flex-shrink-0 w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center text-white" style="background:#25D366">3</span>
-          <span>Click <strong>Generate</strong>, then copy the link or scan the QR code to share anywhere.</span>
+          <span>Click <strong class="text-gray-700">Generate</strong>, then copy the link, open WhatsApp directly, or share the QR code.</span>
         </li>
       </ol>
     </div>
 
-    <!-- ░░ FEATURES ░░ -->
+
     <div class="mt-5 grid sm:grid-cols-3 gap-4">
       <div class="bg-white rounded-2xl shadow-card border border-gray-100 p-5">
-        <div class="text-2xl mb-2">🔒</div>
+        <div class="text-2xl mb-2" aria-hidden="true">🔒</div>
         <div class="font-semibold text-gray-800 text-sm mb-1">100% Private</div>
-        <div class="text-gray-400 text-xs">Everything runs in your browser. Zero data leaves your device.</div>
+        <div class="text-gray-400 text-xs leading-relaxed">Everything runs in your browser. Zero data leaves your device.</div>
       </div>
       <div class="bg-white rounded-2xl shadow-card border border-gray-100 p-5">
-        <div class="text-2xl mb-2">⚡</div>
+        <div class="text-2xl mb-2" aria-hidden="true">⚡</div>
         <div class="font-semibold text-gray-800 text-sm mb-1">Instant QR Code</div>
-        <div class="text-gray-400 text-xs">A scannable QR is generated automatically — download as PNG.</div>
+        <div class="text-gray-400 text-xs leading-relaxed">Scannable QR generated automatically — download as PNG.</div>
       </div>
       <div class="bg-white rounded-2xl shadow-card border border-gray-100 p-5">
-        <div class="text-2xl mb-2">🌍</div>
+        <div class="text-2xl mb-2" aria-hidden="true">🌍</div>
         <div class="font-semibold text-gray-800 text-sm mb-1">30+ Countries</div>
-        <div class="text-gray-400 text-xs">Country codes for India, US, UK, UAE, Australia and many more.</div>
+        <div class="text-gray-400 text-xs leading-relaxed">Country codes for India, US, UK, UAE, Australia and many more.</div>
       </div>
     </div>
 
   </main>
 
-  <!-- ░░ FOOTER / TICKER ░░ -->
-  <footer class="border-t border-gray-200 bg-white overflow-hidden py-3">
-    <div class="overflow-hidden text-xs text-gray-400 font-medium">
-      <div class="ticker-track">
-        &nbsp;&nbsp;&nbsp;✦ wa.me links open WhatsApp directly &nbsp;·&nbsp; Works on Android, iOS and Desktop &nbsp;·&nbsp; No login required &nbsp;·&nbsp; Share via email, Instagram, Linktree or any bio link &nbsp;·&nbsp; Pre-filled messages save clicks &nbsp;·&nbsp; QR code works offline &nbsp;·&nbsp; 100% open source ready &nbsp;·&nbsp;&nbsp;&nbsp;✦ wa.me links open WhatsApp directly &nbsp;·&nbsp; Works on Android, iOS and Desktop &nbsp;·&nbsp; No login required &nbsp;·&nbsp; Share via email, Instagram, Linktree or any bio link &nbsp;·&nbsp; Pre-filled messages save clicks &nbsp;·&nbsp; QR code works offline &nbsp;·&nbsp; 100% open source ready &nbsp;·&nbsp;
+
+  <section
+    aria-labelledby="seo-heading"
+    style="background: linear-gradient(180deg, #f3f4f6 0%, #ffffff 72px);"
+  >
+    <div class="wave-divider" aria-hidden="true">
+      <svg viewBox="0 0 1200 52" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,36 C150,8 350,52 600,28 C850,4 1050,52 1200,28 L1200,52 L0,52 Z" fill="#ffffff"/>
+      </svg>
+    </div>
+
+    <div class="bg-white pt-0 pb-20">
+      <div class="max-w-2xl mx-auto px-4">
+
+        <div class="flex items-center gap-3 mb-10">
+          <div class="flex-1 h-px bg-gray-100"></div>
+          <p id="seo-heading" class="text-xs font-bold uppercase tracking-widest text-gray-400 px-2 whitespace-nowrap">About This Tool</p>
+          <div class="flex-1 h-px bg-gray-100"></div>
+        </div>
+
+        <article class="seo-article space-y-6" itemscope itemtype="https://schema.org/Article">
+
+          <div class="rounded-2xl border border-gray-100 p-6 sm:p-7" style="background:#fafafa;">
+            <h2 id="what-is-wa-direct-link">
+              <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#DCF8C6;" aria-hidden="true">🔗</span>
+              What is a WhatsApp Direct Link?
+            </h2>
+            <p>
+              A <strong>WhatsApp Direct Link</strong> — commonly known as a <strong>wa.me link</strong> — is a special URL that opens a WhatsApp chat window instantly, without requiring the person clicking it to save your phone number first. The link follows a simple format: <code>https://wa.me/[country-code][phone-number]</code>. When tapped on any device, WhatsApp launches automatically and opens a conversation with the specified number. This works across Android, iOS, and desktop browsers, making it a universally accessible and friction-free communication channel. Businesses, creators, and professionals worldwide use wa.me links in websites, social media bios, email signatures, QR codes on packaging, and printed marketing materials to make it effortless for anyone to start a conversation.
+            </p>
+          </div>
+
+          <div class="rounded-2xl border border-gray-100 p-6 sm:p-7" style="background:#fafafa;">
+            <h2 id="india-small-business-whatsapp">
+              <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#DCF8C6;" aria-hidden="true">🇮🇳</span>
+              How Does This Help Indian Small Businesses?
+            </h2>
+            <p>
+              India has over <strong>500 million active WhatsApp users</strong>, making it the world's largest market for the platform. For kirana stores, tailors, tutors, doctors, freelancers, travel agents, and home-based entrepreneurs — WhatsApp is already the primary channel for customer communication. The biggest barrier to converting a casual browser into a paying customer is friction: asking someone to "save your number first" is a step many people skip entirely.
+            </p>
+            <p>
+              A <strong>WhatsApp Direct Link</strong> eliminates that barrier completely. Paste it in your Instagram or Facebook bio, add it to your IndiaMart or JustDial listing, print a QR code on your visiting card or shop banner, or embed an "Order on WhatsApp" button in your website. A customer in Mumbai, Patna, Surat, or any tier-2 city can reach you in a single tap — no friction, no forgotten number, no missed sale. Studies show that businesses using WhatsApp direct links see significantly higher response and conversion rates compared to those who rely on customers saving numbers manually.
+            </p>
+          </div>
+
+          <div class="rounded-2xl border border-gray-100 p-6 sm:p-7" style="background:#fafafa;">
+            <h2 id="prefilled-message-whatsapp">
+              <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#DCF8C6;" aria-hidden="true">✍️</span>
+              What is a Pre-Filled Message?
+            </h2>
+            <p>
+              A <strong>pre-filled message</strong> is custom text that appears automatically in the WhatsApp chat input box the moment someone opens your link. For example, a bakery owner could set the message to <em>"Hi! I'd like to enquire about a custom cake order."</em> All the customer needs to do is tap Send — no typing required. This single feature can dramatically improve your lead conversion rate by reducing the effort needed to initiate a conversation.
+            </p>
+            <p>
+              Pre-filled messages are incredibly versatile. A real-estate agent can use them for property enquiries; a coach can use them for intake requests; an e-commerce seller can pre-fill order details. You can even create <strong>multiple links with different messages</strong> — one for new customers, one for existing buyers, one for a specific product — and distribute each across different marketing channels. This turns your wa.me link into a lightweight but powerful lead-routing system, all without any app or backend required.
+            </p>
+          </div>
+
+          <div class="rounded-2xl p-6 sm:p-7 border" style="background:#f0fdf4; border-color:#bbf7d0;">
+            <h2 id="privacy-and-security" style="color:#15803d;">
+              <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#dcfce7;" aria-hidden="true">🔒</span>
+              100% Private &amp; Secure
+            </h2>
+            <p style="color:#166534;">
+              This tool is built as a <strong>fully client-side application</strong>. Every operation — link construction, QR code generation, input validation — runs entirely inside your web browser using Vanilla JavaScript. When you enter a phone number or type a message, that data is <strong>never transmitted to any server, database, or third-party service</strong>. There are no API calls made with your inputs, no analytics tracking what you type, and no backend infrastructure of any kind involved in generating your link.
+            </p>
+            <p class="mt-3" style="color:#166534;">
+              The wa.me URL is built in-memory from the values you enter, and the QR code is rendered locally using the open-source <strong>QRCode.js library</strong>. Closing the tab leaves absolutely no trace. This makes WALink Generator safe for business owners who handle sensitive client numbers, HR professionals generating links for candidates, and individuals who simply value their privacy. The entire page can be saved and used offline — it requires no internet connection after the initial load.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-5">
+              <span class="trust-badge">✓ No server calls</span>
+              <span class="trust-badge">✓ No cookies tracked</span>
+              <span class="trust-badge">✓ No data stored</span>
+              <span class="trust-badge">✓ Works offline</span>
+              <span class="trust-badge">✓ Open source ready</span>
+            </div>
+          </div>
+
+        </article>
       </div>
     </div>
-    <div class="text-center text-xs text-gray-400 mt-2 pb-1">
-      Built with ❤️ · Runs entirely in your browser · No tracking
+  </section>
+
+
+  <footer class="bg-white border-t border-gray-200">
+
+    <div class="overflow-hidden border-b border-gray-100 py-2.5" aria-hidden="true">
+      <div class="ticker-track text-xs text-gray-400 font-medium select-none">
+        &nbsp;&nbsp;&nbsp;✦ wa.me links open WhatsApp directly &nbsp;·&nbsp; Works on Android, iOS and Desktop &nbsp;·&nbsp; No login required &nbsp;·&nbsp; Share via email, Instagram, Linktree or any bio link &nbsp;·&nbsp; Pre-filled messages save clicks &nbsp;·&nbsp; QR code works offline &nbsp;·&nbsp; 100% open source ready &nbsp;·&nbsp; Trusted by Indian small businesses ✦
+      </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-sm text-gray-500">
+        &copy; 2026 WALink Generator. All rights reserved.
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="/privacy-policy.html" class="text-sm text-gray-500 hover:text-wa-dark transition-colors">Privacy Policy</a>
+        <a href="/terms.html" class="text-sm text-gray-500 hover:text-wa-dark transition-colors">Terms of Service</a>
+      </div>
     </div>
   </footer>
 
-  <!-- ░░ JAVASCRIPT ░░ -->
   <script>
-    // ── Phone number cleanup
-    document.getElementById('phone-number').addEventListener('input', function () {
-      this.value = this.value.replace(/\D/g, '');
-    });
+    const phoneInput = document.getElementById('phone-number');
+    const countryCode = document.getElementById('country-code');
+    const messageInput = document.getElementById('message');
+    const phoneError = document.getElementById('phone-error');
+    const resultSection = document.getElementById('result-section');
+    const generatedLinkInput = document.getElementById('generated-link');
+    const btnOpen = document.getElementById('btn-open');
+    const btnCopy = document.getElementById('btn-copy');
+    const copyLabel = document.getElementById('copy-label');
+    const qrBox = document.getElementById('qr-box');
+    let qrCodeObj = null;
 
-    // ── Generate link
     function generateLink() {
-      const countryCode = document.getElementById('country-code').value.trim();
-      const phone = document.getElementById('phone-number').value.replace(/\D/g, '').trim();
-      const message = document.getElementById('message').value.trim();
-      const errorEl = document.getElementById('phone-error');
-      const phoneInput = document.getElementById('phone-number');
-
-      // Validate phone
-      if (!phone || phone.length < 5 || phone.length > 15) {
-        errorEl.classList.remove('hidden');
-        phoneInput.parentElement.classList.add('shake');
-        setTimeout(() => phoneInput.parentElement.classList.remove('shake'), 450);
+      // Strip any non-digit characters from the phone input
+      const phoneVal = phoneInput.value.replace(/\D/g, '');
+      
+      // Basic validation (length check)
+      if (phoneVal.length < 5 || phoneVal.length > 15) {
+        phoneError.classList.remove('hidden');
+        phoneInput.classList.add('shake');
+        phoneInput.style.borderColor = '#ef4444';
+        setTimeout(() => phoneInput.classList.remove('shake'), 400);
         return;
       }
-      errorEl.classList.add('hidden');
+      
+      // Clear errors
+      phoneError.classList.add('hidden');
+      phoneInput.style.borderColor = '';
 
-      const fullNumber = countryCode + phone;
-      let url = `https://wa.me/${fullNumber}`;
-      if (message) {
-        url += `?text=${encodeURIComponent(message)}`;
+      // Construct URL
+      const fullNumber = countryCode.value + phoneVal;
+      let finalUrl = `https://wa.me/${fullNumber}`;
+      
+      const msgVal = messageInput.value.trim();
+      if (msgVal) {
+        finalUrl += `?text=${encodeURIComponent(msgVal)}`;
       }
 
-      // Set values
-      document.getElementById('generated-link').value = url;
-      document.getElementById('btn-open').href = url;
+      // Update UI with generated link
+      generatedLinkInput.value = finalUrl;
+      btnOpen.href = finalUrl;
 
-      // Reveal result section
-      const resultSection = document.getElementById('result-section');
+      // Generate QR Code
+      qrBox.innerHTML = '';
+      qrCodeObj = new QRCode(qrBox, {
+        text: finalUrl,
+        width: 160,
+        height: 160,
+        colorDark: "#111827",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      // Reveal section
       resultSection.classList.add('visible');
-
-      // Scroll to result
+      
+      // Reset copy button state just in case
+      btnCopy.classList.remove('copied');
+      copyLabel.innerText = 'Copy';
+      
+      // Smooth scroll to the result
       setTimeout(() => {
-        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }, 100);
-
-      // Generate QR
-      generateQR(url);
     }
 
-    // ── QR Code generation
-    let qrInstance = null;
-    function generateQR(url) {
-      const box = document.getElementById('qr-box');
-      box.innerHTML = '';
+    function copyLink() {
+      generatedLinkInput.select();
+      generatedLinkInput.setSelectionRange(0, 99999); // For mobile devices
 
-      qrInstance = new QRCode(box, {
-        text: url,
-        width: 200,
-        height: 200,
-        colorDark: '#075E54',
-        colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.H,
+      navigator.clipboard.writeText(generatedLinkInput.value).then(() => {
+        btnCopy.classList.add('copied');
+        copyLabel.innerText = 'Copied!';
+        setTimeout(() => {
+          btnCopy.classList.remove('copied');
+          copyLabel.innerText = 'Copy';
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
       });
     }
 
-    // ── Copy link
-    async function copyLink() {
-      const link = document.getElementById('generated-link').value;
-      const btn = document.getElementById('btn-copy');
-      const label = document.getElementById('copy-label');
-
-      try {
-        await navigator.clipboard.writeText(link);
-        btn.classList.add('copied');
-        label.textContent = '✓ Copied!';
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          label.textContent = 'Copy';
-        }, 2200);
-      } catch (err) {
-        // Fallback for older browsers
-        const input = document.getElementById('generated-link');
-        input.select();
-        document.execCommand('copy');
-        label.textContent = '✓ Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          label.textContent = 'Copy';
-        }, 2200);
-      }
-    }
-
-    // ── Download QR
     function downloadQR() {
-      const box = document.getElementById('qr-box');
-      const canvas = box.querySelector('canvas');
-      const img = box.querySelector('img');
-
+      const canvas = qrBox.querySelector('canvas');
+      const img = qrBox.querySelector('img');
+      let url = '';
+      
+      // QRCode.js creates a canvas and sometimes an image tag depending on the browser
       if (canvas) {
+        url = canvas.toDataURL("image/png");
+      } else if (img && img.src) {
+        url = img.src;
+      }
+
+      if (url) {
         const link = document.createElement('a');
-        link.download = 'whatsapp-qr.png';
-        link.href = canvas.toDataURL('image/png');
+        link.download = 'whatsapp-qr-code.png';
+        link.href = url;
+        document.body.appendChild(link);
         link.click();
-      } else if (img) {
-        // QRCode.js fallback (some browsers render img instead of canvas)
-        const link = document.createElement('a');
-        link.download = 'whatsapp-qr.png';
-        link.href = img.src;
-        link.click();
+        document.body.removeChild(link);
       }
     }
-
-    // ── Allow Enter key to generate
-    document.getElementById('phone-number').addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') generateLink();
-    });
   </script>
-
 </body>
 </html>
