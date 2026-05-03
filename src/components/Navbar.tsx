@@ -159,7 +159,7 @@ export default function Navbar() {
           setIsSearching(false);
         }
       }
-    }, 160);
+    }, 50);
 
     return () => {
       cancelled = true;
@@ -167,7 +167,7 @@ export default function Navbar() {
     };
   }, [query]);
 
-  const showDropdown = isOpen && (results.length > 0 || isSearching || query.trim().length > 0);
+  const showDropdown = isOpen && (results.length > 0 || query.trim().length > 0);
 
   return (
     <nav className="fixed top-0 w-full bg-slate-950 z-50 p-4 shadow-2xl shadow-black/30">
@@ -192,82 +192,77 @@ export default function Navbar() {
 
           {showDropdown && (
             <div className="absolute top-full left-0 right-0 mt-3 rounded-3xl border border-cyan-400/20 bg-slate-950/95 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl overflow-hidden">
-              {isSearching ? (
-                <div className="p-4 text-center text-slate-300">Searching...</div>
-              ) : (
-                <>
-                  <div className="px-4 py-2 text-xs uppercase tracking-[0.35em] text-cyan-300/80 border-b border-cyan-400/10">
-                    {query.length > 0 ? 'Search results' : 'Popular picks'}
-                  </div>
-                  <div className="max-h-72 overflow-y-auto">
-                    {results.length > 0 ? (
-                      results.map((movie) =>
-                        movie.media_type === 'tv' ? (
-                          <Link
-                            key={`${movie.media_type}-${movie.id}`}
-                            href={`/tv/${movie.id}`}
-                            onClick={() => {
-                              setIsOpen(false);
-                            }}
-                            className="flex items-center gap-3 px-4 py-3 hover:bg-slate-900/80 transition"
-                          >
-                            <div className="relative h-16 w-12 overflow-hidden rounded-2xl bg-slate-800">
-                              {movie.poster_path ? (
-                                <Image
-                                  src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                                  alt={movie.title || movie.name}
-                                  fill
-                                  className="object-cover"
-                                  sizes="48px"
-                                />
-                              ) : (
-                                <div className="flex h-full items-center justify-center text-xs text-slate-400">No img</div>
-                              )}
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-sm font-semibold text-white truncate">{movie.title || movie.name}</p>
-                              <p className="text-xs text-cyan-300 uppercase tracking-[0.22em]">Series</p>
-                              <p className="text-xs text-slate-400 truncate">
-                                {movie.first_air_date?.slice(0, 4) || movie.release_date?.slice(0, 4) || 'TV'}
-                              </p>
-                            </div>
-                          </Link>
-                        ) : (
-                          <Link
-                            key={`${movie.media_type || 'movie'}-${movie.id}`}
-                            href={`/movie/${movie.id}`}
-                            onClick={() => {
-                              setIsOpen(false);
-                            }}
-                            className="flex items-center gap-3 px-4 py-3 hover:bg-slate-900/80 transition"
-                          >
-                            <div className="relative h-16 w-12 overflow-hidden rounded-2xl bg-slate-800">
-                              {movie.poster_path ? (
-                                <Image
-                                  src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                                  alt={movie.title}
-                                  fill
-                                  className="object-cover"
-                                  sizes="48px"
-                                />
-                              ) : (
-                                <div className="flex h-full items-center justify-center text-xs text-slate-400">No img</div>
-                              )}
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-sm font-semibold text-white truncate">{movie.title}</p>
-                              <p className="text-xs text-cyan-300 uppercase tracking-[0.22em]">Movie</p>
-                              <p className="text-xs text-slate-400 truncate">{movie.release_date?.slice(0, 4) || 'Movie'}</p>
-                            </div>
-                          </Link>
-                        ),
-                      )
+              <div className="px-4 py-2 text-xs uppercase tracking-[0.35em] text-cyan-300/80 border-b border-cyan-400/10 flex items-center justify-between gap-3">
+                <span>{query.length > 0 ? 'Search results' : 'Popular picks'}</span>
+                {isSearching ? <span className="text-[10px] tracking-[0.3em] text-slate-400">Updating</span> : null}
+              </div>
+              <div className="max-h-72 overflow-y-auto">
+                {results.length > 0 ? (
+                  results.map((movie) =>
+                    movie.media_type === 'tv' ? (
+                      <Link
+                        key={`${movie.media_type}-${movie.id}`}
+                        href={`/tv/${movie.id}`}
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-slate-900/80 transition"
+                      >
+                        <div className="relative h-16 w-12 overflow-hidden rounded-2xl bg-slate-800">
+                          {movie.poster_path ? (
+                            <Image
+                              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                              alt={movie.title || movie.name}
+                              fill
+                              className="object-cover"
+                              sizes="48px"
+                            />
+                          ) : (
+                            <div className="flex h-full items-center justify-center text-xs text-slate-400">No img</div>
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-white truncate">{movie.title || movie.name}</p>
+                          <p className="text-xs text-cyan-300 uppercase tracking-[0.22em]">Series</p>
+                          <p className="text-xs text-slate-400 truncate">
+                            {movie.first_air_date?.slice(0, 4) || movie.release_date?.slice(0, 4) || 'TV'}
+                          </p>
+                        </div>
+                      </Link>
                     ) : (
-                      <div className="p-4 text-center text-slate-400">No matches found. Try a different title, genre, or series name.</div>
-                    )}
-                  </div>
-                </>
-              )}
+                      <Link
+                        key={`${movie.media_type || 'movie'}-${movie.id}`}
+                        href={`/movie/${movie.id}`}
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-slate-900/80 transition"
+                      >
+                        <div className="relative h-16 w-12 overflow-hidden rounded-2xl bg-slate-800">
+                          {movie.poster_path ? (
+                            <Image
+                              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                              alt={movie.title}
+                              fill
+                              className="object-cover"
+                              sizes="48px"
+                            />
+                          ) : (
+                            <div className="flex h-full items-center justify-center text-xs text-slate-400">No img</div>
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-white truncate">{movie.title}</p>
+                          <p className="text-xs text-cyan-300 uppercase tracking-[0.22em]">Movie</p>
+                          <p className="text-xs text-slate-400 truncate">{movie.release_date?.slice(0, 4) || 'Movie'}</p>
+                        </div>
+                      </Link>
+                    ),
+                  )
+                ) : (
+                  <div className="p-4 text-center text-slate-400">No matches found. Try a different title, genre, or series name.</div>
+                )}
+              </div>
             </div>
           )}
         </div>
