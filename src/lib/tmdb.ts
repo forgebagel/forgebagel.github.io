@@ -173,7 +173,25 @@ export const searchMoviesOnServer = async (query: string) => {
       ...(tvData.results || []).map((item: any) => normalizeMediaItem(item, 'tv')),
     ];
 
-    return { results: combined };
+    // Score and rank results to prioritize exact/start-with matches over fuzzy substring matches
+    const ranked = combined
+      .map((item) => {
+        const normalizedTitle = (item.title || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+        const normalizedQueryLower = normalizedQuery.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+        let score = 0;
+
+        if (normalizedTitle === normalizedQueryLower) score += 200; // exact match
+        if (normalizedTitle.startsWith(normalizedQueryLower)) score += 100; // starts with
+        if (normalizedTitle.includes(normalizedQueryLower)) score += 30; // substring
+        if ((item.overview || '').toLowerCase().includes(normalizedQueryLower)) score += 5; // in description
+
+        return { item, score };
+      })
+      .filter(({ score }) => score > 0) // exclude non-matches
+      .sort((a, b) => b.score - a.score)
+      .map(({ item }) => item);
+
+    return { results: ranked };
   } catch {
     const normalizedQueryText = normalizedQuery.toLowerCase();
     const combined = [
