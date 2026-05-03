@@ -152,6 +152,41 @@ const fetchDiscoverTv = async (query: string, fallback: { results: any[] }) => {
   }
 };
 
+export const searchMoviesOnServer = async (query: string) => {
+  const normalizedQuery = query.trim();
+
+  if (normalizedQuery.length < 2) {
+    return { results: [] };
+  }
+
+  try {
+    const [movieRes, tvRes] = await Promise.all([
+      fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(normalizedQuery)}`),
+      fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(normalizedQuery)}`),
+    ]);
+
+    const movieData = movieRes.ok ? await movieRes.json() : { results: [] };
+    const tvData = tvRes.ok ? await tvRes.json() : { results: [] };
+
+    const combined = [
+      ...(movieData.results || []).map((item: any) => normalizeMediaItem(item, 'movie')),
+      ...(tvData.results || []).map((item: any) => normalizeMediaItem(item, 'tv')),
+    ];
+
+    return { results: combined };
+  } catch {
+    const normalizedQueryText = normalizedQuery.toLowerCase();
+    const combined = [
+      ...mockTrending.results.map((item) => normalizeMediaItem(item, 'movie')),
+      ...mockTvSeries.map((item) => normalizeMediaItem(item, 'tv')),
+    ];
+
+    return {
+      results: combined.filter((item) => `${item.title} ${item.overview || ''}`.toLowerCase().includes(normalizedQueryText)),
+    };
+  }
+};
+
 export const getActionMovies = async () => fetchDiscoverMovies('with_genres=28&sort_by=popularity.desc&vote_count.gte=200', mockPopular);
 export const getComedyMovies = async () => fetchDiscoverMovies('with_genres=35&sort_by=popularity.desc&vote_count.gte=100', mockPopular);
 export const getDramaMovies = async () => fetchDiscoverMovies('with_genres=18&sort_by=vote_average.desc&vote_count.gte=200', mockTopRated);
@@ -253,30 +288,15 @@ export const searchMovies = async (query: string) => {
   }
 
   try {
-      const [movieRes, tvRes] = await Promise.all([
-        fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(normalizedQuery)}`),
-        fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(normalizedQuery)}`),
-      ]);
+    const response = await fetch(`/api/search?query=${encodeURIComponent(normalizedQuery)}`);
 
-      const movieData = movieRes.ok ? await movieRes.json() : { results: [] };
-      const tvData = tvRes.ok ? await tvRes.json() : { results: [] };
+    if (!response.ok) {
+      throw new Error(`Search failed ${response.status}`);
+    }
 
-      const combined = [
-        ...(movieData.results || []).map((item: any) => normalizeMediaItem(item, 'movie')),
-        ...(tvData.results || []).map((item: any) => normalizeMediaItem(item, 'tv')),
-      ];
-
-      return { results: combined };
+    return response.json();
   } catch {
-      const normalizedQueryText = normalizedQuery.toLowerCase();
-      const combined = [
-        ...mockTrending.results.map((item) => normalizeMediaItem(item, 'movie')),
-        ...mockTvSeries.map((item) => normalizeMediaItem(item, 'tv')),
-      ];
-
-      return {
-        results: combined.filter((item) => `${item.title} ${item.overview || ''}`.toLowerCase().includes(normalizedQueryText)),
-      };
+    return searchMoviesOnServer(normalizedQuery);
   }
 };
 

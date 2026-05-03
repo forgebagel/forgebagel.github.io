@@ -130,7 +130,7 @@ export default function Navbar() {
 
     const localMatches = getLocalMatches(trimmedQuery);
 
-    setResults(localMatches.length > 0 ? localMatches : popularSuggestions);
+    setResults(localMatches);
 
     if (trimmedQuery.length < 2) {
       setIsSearching(false);
@@ -259,8 +259,12 @@ export default function Navbar() {
                       </Link>
                     ),
                   )
-                ) : (
+                ) : isSearching ? (
+                  <div className="p-4 text-center text-slate-400">Searching...</div>
+                ) : query.trim().length > 0 ? (
                   <div className="p-4 text-center text-slate-400">No matches found. Try a different title, genre, or series name.</div>
+                ) : (
+                  <div className="p-4 text-center text-slate-400">Type to search movies and series.</div>
                 )}
               </div>
             </div>
