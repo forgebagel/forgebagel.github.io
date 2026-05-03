@@ -3,8 +3,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Movie Discovery",
-  description: "Discover movies with TMDb API",
+  title: "CLAVIO Movies",
+  description: "Discover your favorite movies and TV shows with CLAVIO Movies",
 };
 
 export default function RootLayout({

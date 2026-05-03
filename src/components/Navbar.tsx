@@ -173,8 +173,8 @@ export default function Navbar() {
     <nav className="fixed top-0 w-full bg-slate-950 z-50 p-4 shadow-2xl shadow-black/30">
       <div className="flex items-center justify-between max-w-7xl mx-auto gap-4">
         <Link href="/" className="flex items-center gap-3 text-2xl font-bold text-crimson-600">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-300 shadow-[0_0_20px_rgba(56,189,248,0.18)]">M</span>
-          MovieDB
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-300 shadow-[0_0_20px_rgba(56,189,248,0.18)]">C</span>
+          CLAVIO Movies
         </Link>
 
         <div ref={containerRef} className="relative w-full max-w-xl">
