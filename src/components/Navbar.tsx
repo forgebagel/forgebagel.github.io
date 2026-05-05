@@ -170,14 +170,15 @@ export default function Navbar() {
   const showDropdown = isOpen && (results.length > 0 || query.trim().length > 0);
 
   return (
-    <nav className="fixed top-0 w-full bg-slate-950 z-50 p-4 shadow-2xl shadow-black/30">
-      <div className="flex items-center justify-between max-w-7xl mx-auto gap-4">
-        <Link href="/" className="flex items-center gap-3 text-2xl font-bold text-crimson-600">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-300 shadow-[0_0_20px_rgba(56,189,248,0.18)]">C</span>
-          CLAVIO Movies
+    <nav className="fixed top-0 w-full bg-slate-950 z-50 px-3 py-3 sm:p-4 shadow-2xl shadow-black/30">
+      <div className="flex items-center justify-between max-w-7xl mx-auto gap-2 sm:gap-4">
+        <Link href="/" className="flex items-center gap-2 sm:gap-3 text-lg sm:text-2xl font-bold text-crimson-600 whitespace-nowrap">
+          <span className="inline-flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-300 shadow-[0_0_20px_rgba(56,189,248,0.18)]">C</span>
+          <span>CLAVIO</span>
+          <span className="hidden sm:inline">Movies</span>
         </Link>
 
-        <div ref={containerRef} className="relative w-full max-w-xl">
+        <div ref={containerRef} className="relative w-full max-w-xl min-w-0">
           <input
             type="text"
             placeholder="Search latest movies, hits, genres..."
@@ -187,16 +188,16 @@ export default function Navbar() {
               setQuery(e.target.value);
               setIsOpen(true);
             }}
-            className="bg-slate-900 text-white placeholder:text-slate-500 px-4 py-3 rounded-3xl w-full border border-slate-800 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition"
+            className="bg-slate-900 text-white placeholder:text-slate-500 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-3xl w-full border border-slate-800 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition"
           />
 
           {showDropdown && (
-            <div className="absolute top-full left-0 right-0 mt-3 rounded-3xl border border-cyan-400/20 bg-slate-950/95 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl overflow-hidden">
-              <div className="px-4 py-2 text-xs uppercase tracking-[0.35em] text-cyan-300/80 border-b border-cyan-400/10 flex items-center justify-between gap-3">
+            <div className="absolute top-full left-0 right-0 mt-2 sm:mt-3 rounded-2xl sm:rounded-3xl border border-cyan-400/20 bg-slate-950/95 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl overflow-hidden">
+              <div className="px-3 sm:px-4 py-2 text-[10px] sm:text-xs uppercase tracking-[0.28em] sm:tracking-[0.35em] text-cyan-300/80 border-b border-cyan-400/10 flex items-center justify-between gap-3">
                 <span>{query.length > 0 ? 'Search results' : 'Popular picks'}</span>
                 {isSearching ? <span className="text-[10px] tracking-[0.3em] text-slate-400">Updating</span> : null}
               </div>
-              <div className="max-h-72 overflow-y-auto">
+              <div className="max-h-[65svh] sm:max-h-72 overflow-y-auto">
                 {results.length > 0 ? (
                   results.map((movie) =>
                     movie.media_type === 'tv' ? (
@@ -206,9 +207,9 @@ export default function Navbar() {
                         onClick={() => {
                           setIsOpen(false);
                         }}
-                        className="flex items-center gap-3 px-4 py-3 hover:bg-slate-900/80 transition"
+                        className="flex items-center gap-3 px-3 sm:px-4 py-3 hover:bg-slate-900/80 transition"
                       >
-                        <div className="relative h-16 w-12 overflow-hidden rounded-2xl bg-slate-800">
+                        <div className="relative h-14 w-10 sm:h-16 sm:w-12 overflow-hidden rounded-xl sm:rounded-2xl bg-slate-800">
                           {movie.poster_path ? (
                             <Image
                               src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
@@ -236,9 +237,9 @@ export default function Navbar() {
                         onClick={() => {
                           setIsOpen(false);
                         }}
-                        className="flex items-center gap-3 px-4 py-3 hover:bg-slate-900/80 transition"
+                        className="flex items-center gap-3 px-3 sm:px-4 py-3 hover:bg-slate-900/80 transition"
                       >
-                        <div className="relative h-16 w-12 overflow-hidden rounded-2xl bg-slate-800">
+                        <div className="relative h-14 w-10 sm:h-16 sm:w-12 overflow-hidden rounded-xl sm:rounded-2xl bg-slate-800">
                           {movie.poster_path ? (
                             <Image
                               src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}

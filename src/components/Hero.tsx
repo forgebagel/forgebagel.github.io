@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import VideoEmbed from './VideoEmbed';
 
 interface HeroProps {
   movies: any[];
@@ -13,7 +12,6 @@ export default function Hero({ movies }: HeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const movie = movies?.[currentIndex] || movies?.[0] || null;
   const totalMovies = Math.min(movies?.length || 0, 10);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const handlePrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? totalMovies - 1 : prev - 1));
@@ -28,7 +26,7 @@ export default function Hero({ movies }: HeroProps) {
   }
 
   return (
-    <div className="relative h-screen overflow-hidden">
+    <div className="relative h-[86svh] min-h-[34rem] overflow-hidden md:h-screen">
       {movie.backdrop_path ? (
         <div className="absolute inset-0 transition-opacity duration-300">
           <Image
@@ -45,58 +43,45 @@ export default function Hero({ movies }: HeroProps) {
         <div className="absolute inset-0 bg-slate-950" />
       )}
 
-      <div className="relative z-10 h-full px-6 py-8 flex flex-col justify-center items-center lg:items-start">
+      <div className="relative z-10 h-full px-3 py-6 sm:px-6 md:py-8 flex flex-col justify-center items-center lg:items-start">
         <button
           onClick={handlePrevious}
-          className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full border border-cyan-400/60 bg-slate-950/50 text-cyan-400 transition hover:bg-slate-900 hover:border-cyan-300 hover:shadow-[0_0_20px_rgba(34,197,94,0.5)] z-20"
+          className="absolute left-2 top-1/2 -translate-y-1/2 p-2 md:left-4 md:p-3 rounded-full border border-cyan-400/60 bg-slate-950/50 text-cyan-400 transition hover:bg-slate-900 hover:border-cyan-300 hover:shadow-[0_0_20px_rgba(34,197,94,0.5)] z-20"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
 
-        <div className="w-full max-w-4xl p-6 text-center lg:text-left lg:pl-12 lg:pr-0">
+        <div className="w-full max-w-4xl p-4 sm:p-6 text-center lg:text-left lg:pl-12 lg:pr-0">
           <p className="text-xs uppercase tracking-[0.35em] text-cyan-200/80 mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">Featured ({currentIndex + 1} of {totalMovies})</p>
-          <h1 className="text-4xl lg:text-6xl font-black mb-4 leading-tight text-white drop-shadow-[0_4px_22px_rgba(0,0,0,0.98)]">{movie.title}</h1>
-          <p className="text-sm lg:text-base text-slate-100 leading-relaxed max-w-2xl mb-8 line-clamp-3 mx-auto lg:mx-0 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">{movie.overview}</p>
+          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-black mb-4 leading-tight text-white drop-shadow-[0_4px_22px_rgba(0,0,0,0.98)]">{movie.title}</h1>
+          <p className="text-sm lg:text-base text-slate-100 leading-relaxed max-w-2xl mb-6 sm:mb-8 line-clamp-3 mx-auto lg:mx-0 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">{movie.overview}</p>
           <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-            <button
-              onClick={() => setIsPlaying(true)}
+            <Link
+              href={`/movie/${movie.id}`}
               className="rounded-full bg-cyan-500 px-5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 transition hover:bg-cyan-400"
             >
               Play
-            </button>
-            <Link href={`/movie/${movie.id}`}>
-              <button className="rounded-full border border-cyan-400/40 bg-slate-900/70 px-5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-slate-800/90">
-                More
-              </button>
+            </Link>
+            <Link
+              href={`/movie/${movie.id}`}
+              className="rounded-full border border-cyan-400/40 bg-slate-900/70 px-5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-slate-800/90"
+            >
+              More
             </Link>
           </div>
         </div>
 
         <button
           onClick={handleNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full border border-cyan-400/60 bg-slate-950/50 text-cyan-400 transition hover:bg-slate-900 hover:border-cyan-300 hover:shadow-[0_0_20px_rgba(34,197,94,0.5)] z-20"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 md:right-4 md:p-3 rounded-full border border-cyan-400/60 bg-slate-950/50 text-cyan-400 transition hover:bg-slate-900 hover:border-cyan-300 hover:shadow-[0_0_20px_rgba(34,197,94,0.5)] z-20"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>
       </div>
-
-      {isPlaying && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 px-4">
-          <div className="relative w-full max-w-5xl aspect-video rounded-[2rem] overflow-hidden bg-black shadow-2xl">
-            <VideoEmbed movieId={movie.id} className="w-full h-full" />
-            <button
-              onClick={() => setIsPlaying(false)}
-              className="absolute top-4 right-4 text-white text-3xl"
-            >
-              ×
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

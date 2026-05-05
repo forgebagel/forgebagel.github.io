@@ -173,21 +173,71 @@ export const searchMoviesOnServer = async (query: string) => {
       ...(tvData.results || []).map((item: any) => normalizeMediaItem(item, 'tv')),
     ];
 
-    // Score and rank results to prioritize exact/start-with matches over fuzzy substring matches
+    const normalizeForSearch = (value: string) =>
+      value
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    const levenshteinDistance = (left: string, right: string) => {
+      const m = left.length;
+      const n = right.length;
+
+      if (!m) return n;
+      if (!n) return m;
+
+      const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+
+      for (let i = 0; i <= m; i += 1) dp[i][0] = i;
+      for (let j = 0; j <= n; j += 1) dp[0][j] = j;
+
+      for (let i = 1; i <= m; i += 1) {
+        for (let j = 1; j <= n; j += 1) {
+          const cost = left[i - 1] === right[j - 1] ? 0 : 1;
+          dp[i][j] = Math.min(
+            dp[i - 1][j] + 1,
+            dp[i][j - 1] + 1,
+            dp[i - 1][j - 1] + cost,
+          );
+        }
+      }
+
+      return dp[m][n];
+    };
+
+    // Score and rank results to prioritize exact/start-with matches and tolerate minor typos.
     const ranked = combined
       .map((item) => {
-        const normalizedTitle = (item.title || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
-        const normalizedQueryLower = normalizedQuery.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+        const normalizedTitle = normalizeForSearch(item.title || '');
+        const normalizedQueryLower = normalizeForSearch(normalizedQuery);
+        const normalizedTitleCompact = normalizedTitle.replace(/\s+/g, '');
+        const normalizedQueryCompact = normalizedQueryLower.replace(/\s+/g, '');
+        const titleWords = normalizedTitle.split(' ').filter(Boolean);
+        const queryWords = normalizedQueryLower.split(' ').filter(Boolean);
         let score = 0;
 
-        if (normalizedTitle === normalizedQueryLower) score += 200; // exact match
-        if (normalizedTitle.startsWith(normalizedQueryLower)) score += 100; // starts with
-        if (normalizedTitle.includes(normalizedQueryLower)) score += 30; // substring
-        if ((item.overview || '').toLowerCase().includes(normalizedQueryLower)) score += 5; // in description
+        if (normalizedTitle === normalizedQueryLower) score += 260;
+        if (normalizedTitle.startsWith(normalizedQueryLower)) score += 150;
+        if (normalizedTitle.includes(normalizedQueryLower)) score += 90;
+
+        const compactDistance = levenshteinDistance(normalizedTitleCompact, normalizedQueryCompact);
+        const tokenDistance = titleWords.length
+          ? Math.min(...titleWords.map((word) => levenshteinDistance(word, normalizedQueryCompact)))
+          : compactDistance;
+
+        const bestDistance = Math.min(compactDistance, tokenDistance);
+        if (bestDistance === 1) score += 75;
+        if (bestDistance === 2 && normalizedQueryCompact.length >= 5) score += 35;
+
+        const tokenMatches = queryWords.filter((word) => normalizedTitle.includes(word)).length;
+        score += tokenMatches * 18;
+
+        if ((item.overview || '').toLowerCase().includes(normalizedQueryLower)) score += 6;
 
         return { item, score };
       })
-      .filter(({ score }) => score > 0) // exclude non-matches
+      .filter(({ score }) => score >= 40)
       .sort((a, b) => b.score - a.score)
       .map(({ item }) => item);
 
