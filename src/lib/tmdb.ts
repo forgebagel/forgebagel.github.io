@@ -17,6 +17,9 @@ const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 const VIDSRC_BASE = 'https://vidsrcme.ru';
 
+// IDs to hide from the site (movies or TV shows that should not be shown)
+const BLOCKED_IDS = new Set<number>([122009]);
+
 const CACHE_CONFIG = { next: { revalidate: 300 } };
 
 // Simple server-side in-memory cache to avoid repeated slow TMDb network calls
@@ -58,7 +61,7 @@ const normalizeMediaItem = (item: any, mediaType: 'movie' | 'tv') => ({
 });
 
 const normalizeMediaList = (results: any[], mediaType: 'movie' | 'tv') => ({
-  results: results.map((item) => normalizeMediaItem(item, mediaType)),
+  results: (results || []).filter((item) => !BLOCKED_IDS.has(Number(item?.id))).map((item) => normalizeMediaItem(item, mediaType)),
 });
 
 const movieFallbackLists = [
@@ -84,9 +87,12 @@ const fetchMovieList = async (path: string, fallback: { results: any[] }) => {
   try {
     const res = await fetch(`${BASE_URL}${path}?api_key=${API_KEY}`, CACHE_CONFIG);
     if (!res.ok) throw new Error(`Failed to fetch ${path}`);
-    return res.json();
+    const data = await res.json();
+    data.results = (data.results || []).filter((item: any) => !BLOCKED_IDS.has(Number(item?.id)));
+    return data;
   } catch {
-    return fallback;
+    // ensure fallback doesn't include blocked ids
+    return { results: (fallback.results || []).filter((item: any) => !BLOCKED_IDS.has(Number(item?.id))) };
   }
 };
 
@@ -135,9 +141,10 @@ const fetchTvList = async (path: string, fallback: { results: any[] }) => {
     const res = await fetch(`${BASE_URL}${path}?api_key=${API_KEY}`, CACHE_CONFIG);
     if (!res.ok) throw new Error(`Failed to fetch ${path}`);
     const data = await res.json();
+    data.results = (data.results || []).filter((item: any) => !BLOCKED_IDS.has(Number(item?.id)));
     return normalizeMediaList(data.results || [], 'tv');
   } catch {
-    return fallback;
+    return { results: (fallback.results || []).filter((item: any) => !BLOCKED_IDS.has(Number(item?.id))) };
   }
 };
 
@@ -270,6 +277,9 @@ export const getActionSeries = async () => fetchDiscoverTv('with_genres=10759&so
 export const getDramaSeries = async () => fetchDiscoverTv('with_genres=18&sort_by=vote_average.desc&vote_count.gte=100', mockTvTopRated);
 
 export const getMovieDetails = async (id: string) => {
+  const numericId = parseInt(id, 10);
+  if (BLOCKED_IDS.has(numericId)) throw new Error('Blocked');
+
   try {
     const data = await fetchWithServerCache(
       `${BASE_URL}/movie/${id}?api_key=${API_KEY}&append_to_response=credits,videos`,
@@ -299,6 +309,9 @@ export const getMovieDetails = async (id: string) => {
 };
 
   export const getTvDetails = async (id: string) => {
+    const numericId = parseInt(id, 10);
+    if (BLOCKED_IDS.has(numericId)) throw new Error('Blocked');
+
     try {
       const data = await fetchWithServerCache(`${BASE_URL}/tv/${id}?api_key=${API_KEY}&append_to_response=credits,videos`, undefined, 1000 * 60 * 10);
       return normalizeMediaItem(data, 'tv');
