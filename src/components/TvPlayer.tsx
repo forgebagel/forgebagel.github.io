@@ -37,27 +37,27 @@ const sources = [
   },
   {
     label: 'Vidsrc RU',
-    kind: 'vidsrc' as const,
+    kind: 'vidsrc-path' as const,
     baseUrl: 'https://vidsrc-embed.ru/embed/tv',
   },
   {
     label: 'Vidsrc SU',
-    kind: 'vidsrc' as const,
+    kind: 'vidsrc-path' as const,
     baseUrl: 'https://vidsrc-embed.su/embed/tv',
   },
   {
-    label: 'VidsrcMe',
-    kind: 'vidsrc' as const,
-    baseUrl: 'https://vidsrcme.su/embed/tv',
+    label: 'Vidsrc ME',
+    kind: 'vidsrc-path' as const,
+    baseUrl: 'https://vidsrc.me/embed/tv',
   },
   {
-    label: 'VidKing',
-    kind: 'vidsrc' as const,
-    baseUrl: 'https://www.vidking.net/embed/tv/',
+    label: 'Vidsrc XYZ',
+    kind: 'vidsrc-path' as const,
+    baseUrl: 'https://vidsrc.xyz/embed/tv',
   },
   {
     label: 'Vsrc',
-    kind: 'vidsrc' as const,
+    kind: 'vidsrc-query' as const,
     baseUrl: 'https://vsrc.su/embed/tv',
   },
   {
@@ -245,7 +245,11 @@ export default function TvPlayer({ seriesId, title, seasons, imdbId }: TvPlayerP
           return `https://autoembed.co/tv/${idType}/${preferredSeriesId}?season=${selectedSeasonNumber}&episode=${selectedEpisodeNumber}`;
         }
 
-        return `${source.baseUrl}?tmdb=${seriesId}&season=${selectedSeasonNumber}&episode=${selectedEpisodeNumber}&autoplay=1&autonext=1`;
+        if (source.kind === 'vidsrc-path') {
+          return `${source.baseUrl}/${seriesId}/${selectedSeasonNumber}/${selectedEpisodeNumber}`;
+        }
+
+        return `${source.baseUrl}?tmdb=${seriesId}&season=${selectedSeasonNumber}&episode=${selectedEpisodeNumber}`;
       })()
     : '';
 
@@ -401,7 +405,7 @@ export default function TvPlayer({ seriesId, title, seasons, imdbId }: TvPlayerP
                 className="w-full aspect-video min-h-[12rem] rounded"
                 frameBorder="0"
                 loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share; xr-spatial-tracking"
+                allow="fullscreen *; autoplay *; encrypted-media *; picture-in-picture *"
                 allowFullScreen
                 src={currentSrc}
                 title={`${title} season ${selectedSeasonNumber} episode ${selectedEpisodeNumber}`}
@@ -439,6 +443,9 @@ export default function TvPlayer({ seriesId, title, seasons, imdbId }: TvPlayerP
               <span className="sm:hidden">Next</span>
             </button>
           </div>
+          <p className="text-xs text-slate-400 px-1">
+            If a server does not work, switch to another server.
+          </p>
         </div>
 
         <aside className="space-y-3 rounded-[1.75rem] border border-white/10 bg-white/5 p-3 sm:p-4 backdrop-blur-xl">

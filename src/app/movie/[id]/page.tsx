@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getMovieDetails, getMoviesByGenres } from '@/lib/tmdb';
 import CommentSection from '@/components/CommentSection';
+import VideoEmbed from '@/components/VideoEmbed';
 
 export default async function MoviePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -39,18 +40,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
             {/* Watch Now Section */}
             <div className="relative z-0 mb-10">
               <h2 className="text-2xl font-bold mb-4">Watch Now</h2>
-              <div className="w-full rounded-2xl border-2 border-slate-700 shadow-2xl shadow-black/40 overflow-hidden bg-black">
-                <iframe
-                  src={`https://www.vidking.net/embed/movie/${movie.id}`}
-                  width="100%"
-                  height="600"
-                  className="aspect-video"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share; xr-spatial-tracking"
-                  allowFullScreen
-                  title="Movie Player"
-                />
-              </div>
+              <VideoEmbed movieId={String(movie.id)} />
             </div>
 
             {/* Cast */}
