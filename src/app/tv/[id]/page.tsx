@@ -13,7 +13,7 @@ export default async function TvPage({ params }: { params: Promise<{ id: string 
     ]);
 
     return (
-      <div className="p-8">
+      <div className="p-4 sm:p-6 lg:p-8">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start mb-8">
           <div className="w-full lg:w-72">
             {series.poster_path ? (
@@ -33,14 +33,19 @@ export default async function TvPage({ params }: { params: Promise<{ id: string 
             )}
           </div>
           <div className="flex-1">
-            <h1 className="text-4xl font-bold mb-4">{series.title || series.name}</h1>
-            <p className="text-lg mb-4">{series.overview}</p>
-            <p className="mb-2">First Air Date: {series.first_air_date || series.release_date}</p>
-            <p className="mb-4">Rating: {series.vote_average}/10</p>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-4">{series.title || series.name}</h1>
+            <p className="text-base sm:text-lg mb-4">{series.overview}</p>
+            <p className="mb-2 text-sm sm:text-base">First Air Date: {series.first_air_date || series.release_date}</p>
+            <p className="mb-4 text-sm sm:text-base">Rating: {series.vote_average}/10</p>
 
             <div className="mb-8">
               <h2 className="text-2xl font-bold mb-4">Watch Episodes</h2>
-              <TvPlayer seriesId={series.id} title={series.title || series.name} seasons={series.seasons || []} />
+              <TvPlayer
+                seriesId={series.id}
+                title={series.title || series.name}
+                seasons={series.seasons || []}
+                imdbId={series.imdb_id}
+              />
             </div>
 
             <h2 className="text-2xl font-bold mb-4">Cast</h2>

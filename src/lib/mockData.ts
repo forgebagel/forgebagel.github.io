@@ -147,7 +147,7 @@ export const mockMovies = [
     videos: { results: [] }
   },
   {
-    id: 13,
+    id: 994,
     title: "Forrest Gump",
     poster_path: "/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg",
     backdrop_path: "/3h1JZGDhZ8nzxdgvkxha0qBqi05.jpg",

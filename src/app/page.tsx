@@ -50,7 +50,7 @@ export default async function Home() {
         <HeroSection trendingPromise={trendingPromise} popularPromise={popularPromise} topRatedPromise={topRatedPromise} />
       </Suspense>
 
-      <section className="px-8 pt-8 pb-8 relative z-20">
+      <section className="relative z-20 px-4 pb-6 pt-6 sm:px-6 sm:pt-8 sm:pb-8 lg:px-8">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { title: 'Fresh Picks', subtitle: 'A sharper mix of new releases, buzz titles, and hidden gems.' },
@@ -66,109 +66,109 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Trending Now" moviesPromise={trendingPromise} badge="Hot" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Trending Series" moviesPromise={trendingSeriesPromise} badge="Series" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Netflix Originals" moviesPromise={netflixOriginalsPromise} badge="Netflix" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Popular Series" moviesPromise={popularSeriesPromise} badge="Binge" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Top Rated Series" moviesPromise={topRatedSeriesPromise} badge="Top" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Action Series" moviesPromise={actionSeriesPromise} badge="Action" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Drama Series" moviesPromise={dramaSeriesPromise} badge="Drama" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Action Thrillers" moviesPromise={actionPromise} badge="Action" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Comedy Night" moviesPromise={comedyPromise} badge="Laugh" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Drama & Emotion" moviesPromise={dramaPromise} badge="Drama" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Sci-Fi & Future" moviesPromise={sciFiPromise} badge="Sci-Fi" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Crime & Mystery" moviesPromise={crimePromise} badge="Mystery" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Family Favorites" moviesPromise={familyPromise} badge="Family" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Now Playing" moviesPromise={nowPlayingPromise} badge="In Theaters" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Top Rated" moviesPromise={topRatedPromise} badge="Critic’s Choice" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="New & Upcoming" moviesPromise={upcomingPromise} badge="Soon" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Classics & Favorites" moviesPromise={classicsPromise} badge="Evergreen" />
         </Suspense>
       </section>
 
-      <section className="p-8">
+      <section className="p-4 sm:p-6 lg:p-8">
         <Suspense fallback={<MovieRowSkeleton />}>
           <MovieRowSection title="Popular Picks" moviesPromise={popularPromise} badge="Popular" />
         </Suspense>
@@ -237,11 +237,11 @@ function HeroSkeleton() {
 
 function MovieRowSkeleton() {
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-6 lg:p-8">
       <SkeletonLoader className="h-8 w-48 mb-4" />
       <div className="flex overflow-x-auto space-x-4 pb-4">
         {Array.from({ length: 6 }).map((_, i) => (
-          <SkeletonLoader key={i} className="flex-shrink-0 w-48 h-72 rounded" />
+          <SkeletonLoader key={i} className="h-56 w-32 flex-shrink-0 rounded sm:h-64 sm:w-40 lg:h-72 lg:w-48" />
         ))}
       </div>
     </div>
@@ -250,11 +250,11 @@ function MovieRowSkeleton() {
 
 function MovieRow({ title, movies, badge }: { title: string; movies: any[]; badge?: string }) {
   return (
-    <div className="p-8 rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl shadow-black/30 backdrop-blur-xl backdrop-saturate-150">
+    <div className="rounded-[2rem] border border-white/10 bg-white/5 p-4 sm:p-6 lg:p-8 shadow-2xl shadow-black/30 backdrop-blur-xl backdrop-saturate-150">
       <div className="flex items-center justify-between mb-4 gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.35em] text-crimson-300 font-semibold">{badge || 'Cinema'}</p>
-          <h2 className="text-3xl font-semibold text-slate-100 mt-2">{title}</h2>
+          <h2 className="mt-2 text-2xl font-semibold text-slate-100 sm:text-3xl">{title}</h2>
         </div>
         {badge ? (
           <span className="rounded-full bg-crimson-500/15 px-3 py-1 text-xs text-crimson-200 uppercase tracking-[0.28em] font-semibold">{badge}</span>
@@ -262,26 +262,31 @@ function MovieRow({ title, movies, badge }: { title: string; movies: any[]; badg
       </div>
 
       <div className="flex overflow-x-auto space-x-4 pb-4">
-        {movies.map((movie) => (
-          <Link key={movie.id} href={`/movie/${movie.id}`} className="flex-shrink-0 w-48 group">
-            {movie.poster_path ? (
-              <div className="relative aspect-[2/3] w-full overflow-hidden rounded-[1.75rem] bg-slate-950 border border-cyan-400/10 shadow-xl shadow-cyan-500/5 transition duration-300 group-hover:-translate-y-1 group-hover:border-cyan-400/60">
-                <Image
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={movie.title}
-                  fill
-                  sizes="192px"
-                  className="object-cover transition duration-300 group-hover:opacity-90"
-                />
-              </div>
-            ) : (
-              <div className="relative aspect-[2/3] w-full rounded-[1.75rem] bg-slate-700 flex items-center justify-center">
-                <span className="text-white">No Image</span>
-              </div>
-            )}
-            <h3 className="mt-3 text-sm font-semibold text-slate-100 line-clamp-2">{movie.title}</h3>
-          </Link>
-        ))}
+        {movies.map((movie) => {
+          const type = movie.media_type || 'movie';
+          const href = type === 'tv' ? `/tv/${movie.id}` : `/movie/${movie.id}`;
+
+          return (
+            <Link key={`${type}-${movie.id}`} href={href} className="group w-32 flex-shrink-0 sm:w-40 lg:w-48">
+              {movie.poster_path ? (
+                <div className="relative aspect-[2/3] w-full overflow-hidden rounded-[1.75rem] bg-slate-950 border border-cyan-400/10 shadow-xl shadow-cyan-500/5 transition duration-300 group-hover:-translate-y-1 group-hover:border-cyan-400/60">
+                  <Image
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title || movie.name}
+                    fill
+                    sizes="192px"
+                    className="object-cover transition duration-300 group-hover:opacity-90"
+                  />
+                </div>
+              ) : (
+                <div className="relative aspect-[2/3] w-full rounded-[1.75rem] bg-slate-700 flex items-center justify-center">
+                  <span className="text-white">No Image</span>
+                </div>
+              )}
+              <h3 className="mt-3 line-clamp-2 text-xs font-semibold text-slate-100 sm:text-sm">{movie.title || movie.name}</h3>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

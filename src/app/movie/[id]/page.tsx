@@ -1,9 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
-import { getMovieDetails, getMoviesByGenres, getTvDetails } from '@/lib/tmdb';
+import { getMovieDetails, getMoviesByGenres } from '@/lib/tmdb';
 import CommentSection from '@/components/CommentSection';
-import VideoEmbed from '@/components/VideoEmbed';
 
 export default async function MoviePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -12,14 +10,9 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
     const movie = await getMovieDetails(resolvedParams.id);
     const related = await getMoviesByGenres(movie.genres?.map((genre: { id: number }) => genre.id) || [], resolvedParams.id);
 
-    const tvCandidate = await getTvDetails(resolvedParams.id);
-    if (tvCandidate?.media_type === 'tv' && Array.isArray(tvCandidate.seasons) && tvCandidate.seasons.length > 0) {
-      redirect(`/tv/${resolvedParams.id}`);
-    }
-
     return (
-      <div className="p-8">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-start mb-8">
+      <div className="p-4 sm:p-6 lg:p-8">
+        <div className="mb-8 flex flex-col gap-8 lg:flex-row lg:items-start">
           <div className="w-full lg:w-72">
             {movie.poster_path ? (
               <div className="relative aspect-[2/3] w-full overflow-hidden rounded-3xl bg-gray-900">
@@ -38,23 +31,33 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
             )}
           </div>
           <div className="flex-1">
-            <h1 className="text-4xl font-bold mb-4">{movie.title}</h1>
-            <p className="text-lg mb-4">{movie.overview}</p>
+            <h1 className="mb-4 text-3xl font-bold sm:text-4xl">{movie.title}</h1>
+            <p className="mb-4 text-base sm:text-lg">{movie.overview}</p>
             <p className="mb-2">Release Date: {movie.release_date}</p>
             <p className="mb-4">Rating: {movie.vote_average}/10</p>
 
             {/* Watch Now Section */}
-            <div className="mb-8">
+            <div className="relative z-0 mb-10">
               <h2 className="text-2xl font-bold mb-4">Watch Now</h2>
-              <VideoEmbed movieId={movie.id} className="w-full h-96" />
+              <div className="w-full rounded-2xl border-2 border-slate-700 shadow-2xl shadow-black/40 overflow-hidden bg-black">
+                <iframe
+                  src={`https://www.vidking.net/embed/movie/${movie.id}`}
+                  width="100%"
+                  height="600"
+                  className="aspect-video"
+                  frameBorder="0"
+                  allowFullScreen
+                  title="Movie Player"
+                />
+              </div>
             </div>
 
             {/* Cast */}
             <h2 className="text-2xl font-bold mb-4">Cast</h2>
-            <div className="flex overflow-x-auto space-x-4 pb-4">
+            <div className="flex overflow-x-auto space-x-3 pb-4 sm:space-x-4">
               {movie.credits?.cast?.slice(0, 10).length ? (
                 movie.credits.cast.slice(0, 10).map((actor: any) => (
-                  <div key={actor.id} className="flex-shrink-0 w-24 text-center">
+                  <div key={actor.id} className="w-20 flex-shrink-0 text-center sm:w-24">
                     {actor.profile_path ? (
                       <div className="relative aspect-[2/3] w-full overflow-hidden rounded-xl bg-gray-900">
                         <Image
@@ -70,7 +73,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
                         <span className="text-gray-300 text-xs">No image</span>
                       </div>
                     )}
-                    <p className="text-sm mt-2">{actor.name}</p>
+                    <p className="mt-2 text-xs sm:text-sm">{actor.name}</p>
                   </div>
                 ))
               ) : (
@@ -84,10 +87,10 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
         <h2 className="text-2xl font-bold mb-4">
           More {movie.genres?.[0]?.name ? `${movie.genres[0].name} ` : ''}Movies
         </h2>
-        <div className="flex overflow-x-auto space-x-4 pb-4">
+        <div className="flex overflow-x-auto space-x-3 pb-4 sm:space-x-4">
           {related.results?.length ? (
             related.results.map((movie: any) => (
-              <Link key={movie.id} href={`/movie/${movie.id}`} className="flex-shrink-0 w-48 group">
+              <Link key={movie.id} href={`/movie/${movie.id}`} className="group w-32 flex-shrink-0 sm:w-40 lg:w-48">
                 <div className="relative aspect-[2/3] w-full overflow-hidden rounded-xl bg-gray-900">
                   <Image
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -97,7 +100,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
                     className="object-cover transition duration-300 group-hover:opacity-80"
                   />
                 </div>
-                <h3 className="mt-2 text-sm font-medium">{movie.title}</h3>
+                <h3 className="mt-2 text-xs font-medium sm:text-sm">{movie.title}</h3>
               </Link>
             ))
           ) : (
