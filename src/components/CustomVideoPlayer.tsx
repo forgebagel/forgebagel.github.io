@@ -28,7 +28,7 @@ export default function CustomVideoPlayer({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [selectedSubtitleIndex, setSelectedSubtitleIndex] = useState(-1);
   const [showControls, setShowControls] = useState(true);
-  const controlsTimeoutRef = useRef<NodeJS.Timeout>();
+  const controlsTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
