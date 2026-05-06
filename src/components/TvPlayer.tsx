@@ -401,7 +401,7 @@ export default function TvPlayer({ seriesId, title, seasons, imdbId }: TvPlayerP
                 className="w-full aspect-video min-h-[12rem] rounded"
                 frameBorder="0"
                 loading="lazy"
-                allow="accelerator; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share; xr-spatial-tracking"
                 allowFullScreen
                 src={currentSrc}
                 title={`${title} season ${selectedSeasonNumber} episode ${selectedEpisodeNumber}`}

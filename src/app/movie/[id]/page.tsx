@@ -46,6 +46,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
                   height="600"
                   className="aspect-video"
                   frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share; xr-spatial-tracking"
                   allowFullScreen
                   title="Movie Player"
                 />
