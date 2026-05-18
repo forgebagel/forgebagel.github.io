@@ -38,56 +38,17 @@ const localCatalog = [...mockMovies, ...mockTvSeries];
 const normalizeText = (value: string) => value.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
 
 const dedupeMovies = (movies: any[]) => {
-  const seen = new Set<number>();
+  const seen = new Set<string>();
   return movies.filter((movie) => {
-    if (seen.has(movie.id)) {
+    const key = `${movie.media_type || 'movie'}-${movie.id}`;
+
+    if (seen.has(key)) {
       return false;
     }
 
-    seen.add(movie.id);
+    seen.add(key);
     return true;
   });
-};
-
-const getLocalMatches = (query: string) => {
-  const normalizedQuery = normalizeText(query);
-
-  if (!normalizedQuery) {
-    return localCatalog.slice(0, 10);
-  }
-
-  const terms = normalizedQuery.split(' ').filter(Boolean);
-  const isSingleCharacterQuery = normalizedQuery.length === 1;
-
-  return localCatalog
-    .map((movie) => {
-      const title = normalizeText(movie.title || '');
-      const seriesName = normalizeText((movie as any).name || '');
-      const overview = normalizeText(movie.overview || '');
-      let score = 0;
-
-      if (title === normalizedQuery) score += 100;
-      if (seriesName === normalizedQuery) score += 100;
-      if (title.startsWith(normalizedQuery)) score += 80;
-      if (seriesName.startsWith(normalizedQuery)) score += 80;
-      if (title.includes(normalizedQuery)) score += isSingleCharacterQuery ? 24 : 40;
-      if (seriesName.includes(normalizedQuery)) score += isSingleCharacterQuery ? 24 : 40;
-      if (!isSingleCharacterQuery && overview.includes(normalizedQuery)) score += 12;
-
-      if (!isSingleCharacterQuery) {
-        terms.forEach((term) => {
-          if (title.includes(term)) score += 8;
-          if (seriesName.includes(term)) score += 8;
-          if (overview.includes(term)) score += 2;
-        });
-      }
-
-      return { movie, score };
-    })
-    .filter(({ score }) => score > 0)
-    .sort((left, right) => right.score - left.score)
-    .map(({ movie }) => movie)
-    .slice(0, 12);
 };
 
 export default function Navbar() {
@@ -128,11 +89,8 @@ export default function Navbar() {
       return;
     }
 
-    const localMatches = getLocalMatches(trimmedQuery);
-
-    setResults(localMatches);
-
     if (trimmedQuery.length < 2) {
+      setResults([]);
       setIsSearching(false);
       return;
     }
@@ -144,15 +102,15 @@ export default function Navbar() {
       try {
         const data = await searchMovies(trimmedQuery);
         const remoteMatches = Array.isArray(data.results) ? data.results : [];
-        const combined = dedupeMovies([...remoteMatches, ...localMatches]).slice(0, 12);
+        const combined = dedupeMovies(remoteMatches).slice(0, 12);
 
         if (!cancelled) {
-          setResults(combined.length > 0 ? combined : localMatches);
+          setResults(combined);
         }
       } catch (error) {
         console.error('Search error:', error);
         if (!cancelled) {
-          setResults(localMatches);
+          setResults([]);
         }
       } finally {
         if (!cancelled) {

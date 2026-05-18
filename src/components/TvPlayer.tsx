@@ -402,6 +402,7 @@ export default function TvPlayer({ seriesId, title, seasons, imdbId }: TvPlayerP
             {hasPlayableEpisode ? (
               <iframe
                 ref={iframeRef}
+                key={`${currentSourceIndex}-${selectedSeasonNumber}-${selectedEpisodeNumber}`}
                 className="w-full aspect-video min-h-[12rem] rounded"
                 frameBorder="0"
                 loading="lazy"
