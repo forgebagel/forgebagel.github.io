@@ -8,10 +8,15 @@ interface VideoEmbedProps {
 
 const sources = [
   { label: 'Vidking', kind: 'vidking' as const, baseUrl: 'https://www.vidking.net/embed/movie' },
+  { label: 'Vidsrcme RU', kind: 'vidsrc-path' as const, baseUrl: 'https://vidsrcme.ru/embed/movie' },
+  { label: 'Vidsrcme SU', kind: 'vidsrc-path' as const, baseUrl: 'https://vidsrcme.su/embed/movie' },
+  { label: 'Vidsrc-me RU', kind: 'vidsrc-path' as const, baseUrl: 'https://vidsrc-me.ru/embed/movie' },
+  { label: 'Vidsrc-me SU', kind: 'vidsrc-path' as const, baseUrl: 'https://vidsrc-me.su/embed/movie' },
   { label: 'Vidsrc RU', kind: 'vidsrc-path' as const, baseUrl: 'https://vidsrc-embed.ru/embed/movie' },
   { label: 'Vidsrc SU', kind: 'vidsrc-path' as const, baseUrl: 'https://vidsrc-embed.su/embed/movie' },
   { label: 'Vidsrc ME', kind: 'vidsrc-path' as const, baseUrl: 'https://vidsrc.me/embed/movie' },
   { label: 'Vidsrc XYZ', kind: 'vidsrc-path' as const, baseUrl: 'https://vidsrc.xyz/embed/movie' },
+  { label: 'Vsrc SU', kind: 'vidsrc-query' as const, baseUrl: 'https://vsrc.su/embed/movie' },
   { label: '2Embed CC', kind: '2embed' as const, baseUrl: 'https://www.2embed.cc/embed/' },
   { label: '2Embed Skin', kind: '2embed' as const, baseUrl: 'https://www.2embed.skin/embed/' },
   { label: 'AutoEmbed', kind: 'autoembed' as const },
@@ -21,11 +26,19 @@ export default function VideoEmbed({ movieId }: VideoEmbedProps) {
   const [currentSourceIndex, setCurrentSourceIndex] = useState(0);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
+  const tryNextSource = () => {
+    setCurrentSourceIndex((prev) => (prev + 1) % sources.length);
+  };
+
   const src = useMemo(() => {
     const source = sources[currentSourceIndex];
 
     if (source.kind === 'vidking' || source.kind === 'vidsrc-path') {
       return `${source.baseUrl}/${movieId}`;
+    }
+
+    if (source.kind === 'vidsrc-query') {
+      return `${source.baseUrl}?tmdb=${encodeURIComponent(movieId)}`;
     }
 
     if (source.kind === '2embed') {
@@ -78,9 +91,18 @@ export default function VideoEmbed({ movieId }: VideoEmbedProps) {
             </option>
           ))}
         </select>
+        <button
+          onClick={tryNextSource}
+          className="rounded-full bg-cyan-500 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 transition hover:bg-cyan-400"
+        >
+          Next Server
+        </button>
       </div>
       <p className="text-xs text-slate-400 px-1">
         If a server does not work, switch to another server.
+      </p>
+      <p className="text-xs text-amber-300/90 px-1">
+        Disclaimer: For a better streaming experience and improved server availability, using a VPN may help.
       </p>
     </div>
   );

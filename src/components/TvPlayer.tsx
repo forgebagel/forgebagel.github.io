@@ -36,6 +36,26 @@ const sources = [
     baseUrl: 'https://www.vidking.net/embed/tv',
   },
   {
+    label: 'Vidsrcme RU',
+    kind: 'vidsrc-path' as const,
+    baseUrl: 'https://vidsrcme.ru/embed/tv',
+  },
+  {
+    label: 'Vidsrcme SU',
+    kind: 'vidsrc-path' as const,
+    baseUrl: 'https://vidsrcme.su/embed/tv',
+  },
+  {
+    label: 'Vidsrc-me RU',
+    kind: 'vidsrc-path' as const,
+    baseUrl: 'https://vidsrc-me.ru/embed/tv',
+  },
+  {
+    label: 'Vidsrc-me SU',
+    kind: 'vidsrc-path' as const,
+    baseUrl: 'https://vidsrc-me.su/embed/tv',
+  },
+  {
     label: 'Vidsrc RU',
     kind: 'vidsrc-path' as const,
     baseUrl: 'https://vidsrc-embed.ru/embed/tv',
@@ -246,10 +266,13 @@ export default function TvPlayer({ seriesId, title, seasons, imdbId }: TvPlayerP
         }
 
         if (source.kind === 'vidsrc-path') {
-          return `${source.baseUrl}/${seriesId}/${selectedSeasonNumber}/${selectedEpisodeNumber}`;
+          return `${source.baseUrl}/${preferredSeriesId}/${selectedSeasonNumber}-${selectedEpisodeNumber}`;
         }
 
-        return `${source.baseUrl}?tmdb=${seriesId}&season=${selectedSeasonNumber}&episode=${selectedEpisodeNumber}`;
+        const idType = String(preferredSeriesId).startsWith('tt') ? 'imdb' : 'tmdb';
+        return `${source.baseUrl}?${idType}=${encodeURIComponent(
+          preferredSeriesId
+        )}&season=${selectedSeasonNumber}&episode=${selectedEpisodeNumber}`;
       })()
     : '';
 
@@ -446,6 +469,9 @@ export default function TvPlayer({ seriesId, title, seasons, imdbId }: TvPlayerP
           </div>
           <p className="text-xs text-slate-400 px-1">
             If a server does not work, switch to another server.
+          </p>
+          <p className="text-xs text-amber-300/90 px-1">
+            Disclaimer: For a better streaming experience and improved server availability, using a VPN may help.
           </p>
         </div>
 
